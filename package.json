@@ -1,0 +1,25 @@
+{
+  "name": "oratoriocordon",
+  "version": "1.0.0",
+  "description": "Pagina web para mi grupo de voluntariado",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/camiborrelli/OratorioCordon.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/camiborrelli/OratorioCordon/issues"
+  },
+  "homepage": "https://github.com/camiborrelli/OratorioCordon#readme",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "mongoose": "^9.2.3"
+  }
+}
