@@ -9,7 +9,7 @@ export const getNiniosService = async (req, res) => {
   }
 };
 
-export const createNinioService = async (req, res) => {
+export const registrarNinioService = async (req, res) => {
   const {
     nombre,
     apellido,
@@ -53,7 +53,7 @@ export const getNinioByNameService = async (req, res) => {
   }
 };
 
-export const updateNinioService = async (req, res) => {
+export const actualizarNinioService = async (req, res) => {
   const { id } = req.params;
   const {
     nombre,
@@ -88,7 +88,7 @@ export const updateNinioService = async (req, res) => {
   }
 };
 
-export const deleteNinioService = async (req, res) => {
+export const eliminarNinioService = async (req, res) => {
   const { id } = req.params;
   try {
     const ninioEliminado = await Ninio.findByIdAndDelete(id);

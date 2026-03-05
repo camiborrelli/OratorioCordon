@@ -1,60 +1,60 @@
 import {
-  getAnimadorByNameService,
-  createAnimadorService,
   getAnimadoresService,
-  getAnimadorByNameService,
-  getAnimadorByApodoService,
-  getAnimadoresByDivisionService,
-  getAnimadoresPorRecorridaService,
+  registerService,
+  loginAnimadorService,
+  getAnimadorByIdService,
   updateAnimadorService,
-  deleteAnimadorService,
-} from "../v1/services/animador.service.js";
+} from "../services/animador.services.js";
 
 export const crearAnimadorController = async (req, res) => {
-  const animadorCreado = await createAnimadorService(req, res);
-  res.status(201).json(animadorCreado);
+  try {
+    const result = await registerService(req.body);
+    res.status(201).json(result);
+  } catch (err) {
+    res.status(err.status || 500).json({ message: err.message });
+  }
+};
+
+export const loginAnimadorController = async (req, res) => {
+  try {
+    const result = await loginAnimadorService(req.body);
+    res.json(result);
+  } catch (err) {
+    res.status(err.status || 500).json({ message: err.message });
+  }
 };
 
 export const obtenerAnimadoresController = async (req, res) => {
-  const animadores = await getAnimadoresService(req, res);
-  res.json(animadores);
+  try {
+    const animadores = await getAnimadoresService();
+    res.json(animadores);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
-export const obtenerAnimadorPorNombreController = async (req, res) => {
-  const animador = await getAnimadorByNameService(req, res);
-  res.json(animador);
-};
-
-export const obtenerAnimadorPorApodoController = async (req, res) => {
-  const animador = await getAnimadorByApodoService(req, res);
-  res.json(animador);
-};
-
-export const obtenerAnimadoresPorDivisionController = async (req, res) => {
-  const animadores = await getAnimadoresByDivisionService(req, res);
-  res.json(animadores);
-};
-
-export const obtenerAnimadoresPorRecorridaController = async (req, res) => {
-  const animadores = await getAnimadoresPorRecorridaService(req, res);
-  res.json(animadores);
+export const verPerfilController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const animador = await getAnimadorByIdService(id);
+    res.json(animador);
+  } catch (err) {
+    res.status(err.status || 500).json({ message: err.message });
+  }
 };
 
 export const actualizarAnimadorController = async (req, res) => {
-  const animadorActualizado = await updateAnimadorService(req, res);
-  res.json(animadorActualizado);
+  try {
+    const { id } = req.params;
+    const updated = await updateAnimadorService(id, req.body);
+    res.json(updated);
+  } catch (err) {
+    res.status(err.status || 500).json({ message: err.message });
+  }
 };
 
-// export const eliminarAnimadorController = async (req, res) => {
-//   const resultadoEliminacion = await deleteAnimadorService(req, res);
-//   res.json(resultadoEliminacion);
-// };
-
-export const verPerfilController = async (req, res) => {
-  const { id } = req.params;
-  const animador = await Animador.findById(id);
-  if (!animador) {
-    return res.status(404).json({ message: "Animador no encontrado" });
-  }
-  res.json(animador);
+export const validarUsuarioTokenController = async (req, res) => {
+  res.status(200).json({
+    message: "Token valido",
+  });
 };

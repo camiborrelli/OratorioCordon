@@ -1,32 +1,52 @@
 import {
-  crearEventoController,
-  obtenerEventosController,
-  obtenerEventoPorIdController,
-  actualizarEventoController,
-  eliminarEventoController,
-} from "../v1/services/evento.service.js";
+  getEventosService,
+  createEventoService,
+  getEventoByNameService,
+  updateEventoService,
+  deleteEventoService,
+} from "../services/evento.services.js";
 
 export const crearEventoController = async (req, res) => {
-  const eventoCreado = await crearEventoController(req, res);
-  res.status(201).json(eventoCreado);
+  try {
+    const eventoCreado = await createEventoService(req, res);
+    res.status(201).json(eventoCreado);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 export const obtenerEventosController = async (req, res) => {
-  const eventos = await obtenerEventosController(req, res);
-  res.json(eventos);
+  try {
+    const eventos = await getEventosService(req, res);
+    res.json(eventos);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 export const obtenerEventoPorIdController = async (req, res) => {
-  const evento = await obtenerEventoPorIdController(req, res);
-  res.json(evento);
+  try {
+    const evento = await getEventoByNameService(req, res);
+    res.json(evento);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 export const actualizarEventoController = async (req, res) => {
-  const eventoActualizado = await actualizarEventoController(req, res);
-  res.json(eventoActualizado);
+  try {
+    const eventoActualizado = await updateEventoService(req, res);
+    res.json(eventoActualizado);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 export const eliminarEventoController = async (req, res) => {
-  const resultadoEliminacion = await eliminarEventoController(req, res);
-  res.json(resultadoEliminacion);
+  try {
+    const resultadoEliminacion = await deleteEventoService(req, res);
+    res.json(resultadoEliminacion);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };

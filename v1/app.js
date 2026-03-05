@@ -7,13 +7,19 @@ app.use(cors());
 app.use(express.json());
 
 // Example auth middleware applied to protected routes
-const auth = require("./middlewares/auth");
-const errorHandler = require("./middlewares/errorHandler");
+const authModule = require("./middlewares/auth");
+const errorHandlerModule = require("./middlewares/errorHandler");
+const auth = authModule && authModule.default ? authModule.default : authModule;
+const errorHandler =
+  errorHandlerModule && errorHandlerModule.default
+    ? errorHandlerModule.default
+    : errorHandlerModule;
 
-app.use("/ninio", auth, require("../routes/ninio.routes"));
-app.use("/animador", auth, require("../routes/animador.routes"));
-app.use("/division", auth, require("../routes/division.routes"));
-app.use("/evento", auth, require("../routes/evento.routes"));
+// routes are ESM modules exporting default router when imported via require
+app.use("/ninio", auth, require("../routes/ninio.routes").default);
+app.use("/animador", auth, require("../routes/animador.routes").default);
+app.use("/division", auth, require("../routes/division.routes").default);
+app.use("/evento", auth, require("../routes/evento.routes").default);
 
 app.get("/health", (req, res) => res.json({ status: "ok" }));
 

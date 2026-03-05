@@ -40,3 +40,12 @@ export const updateDivisionService = async (req, res) => {
   }
   res.json(divisionActualizada);
 };
+
+export const deleteDivisionService = async (req, res) => {
+  const { id } = req.params;
+  const divisionEliminada = await Division.findByIdAndDelete(id);
+  if (!divisionEliminada) {
+    return res.status(404).json({ message: "División no encontrada" });
+  }
+  res.json({ message: "División eliminada correctamente" });
+};

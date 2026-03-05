@@ -1,0 +1,139 @@
+:root {
+  --green: #2f7a3e;
+  --green-600: #25632f;
+  --muted: #f3f5f3;
+  --card-bg: #ffffff;
+  --text: #16321f;
+}
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+  margin: 0;
+  font-family:
+    Inter,
+    Segoe UI,
+    Arial,
+    sans-serif;
+  background: #fafcf9;
+  color: var(--text);
+}
+.wrap {
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.card {
+  width: 360px;
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 28px;
+  border: 1px solid #e9efe9;
+  box-shadow: 0 6px 18px rgba(47, 122, 62, 0.06);
+}
+.logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+.title {
+  text-align: center;
+  color: var(--green);
+  margin: 0 0 6px;
+  font-size: 20px;
+}
+.subtitle {
+  text-align: center;
+  margin: 0 0 16px;
+  color: #6a7a6a;
+  font-size: 13px;
+}
+.role-toggle {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.role {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #e6f0e9;
+  background: transparent;
+  color: var(--green);
+  cursor: pointer;
+}
+.role.active {
+  background: linear-gradient(180deg, var(--green), var(--green-600));
+  color: white;
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.06);
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.input-group {
+  display: flex;
+  align-items: center;
+  background: var(--muted);
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #eef5ee;
+}
+.input-group .icon {
+  margin-right: 8px;
+  opacity: 0.8;
+}
+.input-group input {
+  border: 0;
+  background: transparent;
+  flex: 1;
+  font-size: 15px;
+  outline: none;
+}
+.eye {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font-size: 16px;
+}
+.forgot {
+  text-align: right;
+  font-size: 13px;
+  color: var(--green);
+  margin-top: -4px;
+}
+.forgot a {
+  color: var(--green);
+  text-decoration: none;
+}
+.primary {
+  margin-top: 6px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 0;
+  background: var(--green);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+.primary:active {
+  transform: translateY(1px);
+}
+.visually-hidden {
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap;
+}
+@media (max-width: 420px) {
+  .card {
+    width: 100%;
+  }
+}

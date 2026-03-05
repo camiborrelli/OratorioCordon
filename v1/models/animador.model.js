@@ -1,6 +1,8 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-export const AnimadorSchema = new mongoose.Schema({
+const { Schema } = mongoose;
+
+export const AnimadorSchema = new Schema({
   nombre: String,
   apellido: String,
   apodo: String,
@@ -13,7 +15,7 @@ export const AnimadorSchema = new mongoose.Schema({
   recorrida: String, // valores: rojo, azul, naranja, amarillo
   roles: {
     type: [String],
-    enum: ["animador", "coordinador"],
+    enum: ["animador", "coordinador_general", "coordinador_A", "coordinador_B"],
     default: ["animador"],
   },
 });

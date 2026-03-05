@@ -8,15 +8,22 @@ import {
 } from "../controllers/recorrida.controller.js";
 
 const router = express.Router();
-import { validateBody } from "../middlewares/validation.middleware.js";
-import { recorridaSchema } from "../schemas/recorrida.schema.js";
+import { validateBody } from "../middlewares/validateBody.middleware.js";
+import {
+  registrarRecorridaSchema,
+  actualizarRecorridaSchema,
+} from "../validators/recorrida.validator.js";
 
+router.post(
+  "/",
+  validateBody(registrarRecorridaSchema),
+  crearRecorridaController,
+);
 router.get("/", obtenerRecorridasController);
-router.post("/", validateBody(recorridaSchema), crearRecorridaController);
 router.get("/:id", obtenerRecorridaPorIdController);
 router.put(
   "/:id",
-  validateBody(recorridaSchema),
+  validateBody(actualizarRecorridaSchema),
   actualizarRecorridaController,
 );
 router.delete("/:id", eliminarRecorridaController);

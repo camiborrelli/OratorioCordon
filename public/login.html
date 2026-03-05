@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Oratorio Cordón — Login</title>
+    <link rel="stylesheet" href="/css/login.css" />
+  </head>
+  <body>
+    <main class="wrap">
+      <section class="card">
+        <div class="logo">
+          <svg
+            width="60"
+            height="60"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 2C13.1046 2 14 2.89543 14 4V6H18C19.1046 6 20 6.89543 20 8V17C20 18.1046 19.1046 19 18 19H6C4.89543 19 4 18.1046 4 17V8C4 6.89543 4.89543 6 6 6H10V4C10 2.89543 10.8954 2 12 2Z"
+              fill="#2F7A3E"
+            />
+          </svg>
+        </div>
+
+        <h1 class="title">Oratorio Cordón</h1>
+        <p class="subtitle">Sistema de Gestión de Voluntarios</p>
+
+        <div class="role-toggle" role="tablist" aria-label="Seleccionar perfil">
+          <button class="role active" data-role="animador">👤 Animador</button>
+          <button class="role" data-role="coordinador">🧑‍🤝‍🧑 Coordinador</button>
+        </div>
+
+        <form id="loginForm" class="form">
+          <div class="input-group">
+            <label class="visually-hidden" for="email"
+              >Correo electrónico</label
+            >
+            <span class="icon">📧</span>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="Correo electrónico"
+              required
+            />
+          </div>
+
+          <div class="input-group">
+            <label class="visually-hidden" for="password">Contraseña</label>
+            <span class="icon">🔒</span>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="Contraseña"
+              required
+            />
+            <button
+              type="button"
+              id="togglePassword"
+              class="eye"
+              aria-label="Mostrar contraseña"
+            >
+              👁️
+            </button>
+          </div>
+
+          <div class="forgot"><a href="#">¿Olvidaste tu contraseña?</a></div>
+
+          <button id="submitBtn" class="primary">Iniciar Sesión</button>
+        </form>
+      </section>
+    </main>
+
+    <script src="/js/login.js"></script>
+  </body>
+</html>

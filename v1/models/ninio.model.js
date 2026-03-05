@@ -1,6 +1,8 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const niñoSchema = new mongoose.Schema({
+const { Schema } = mongoose;
+
+const ninioSchema = new Schema({
   nombre: String,
   recorrida: String, // valores: rojo, azul, naranja, amarillo
   division: String,
@@ -10,4 +12,4 @@ const niñoSchema = new mongoose.Schema({
   fecha_cumple: Date,
 });
 
-module.exports = mongoose.model("Niño", niñoSchema);
+export default mongoose.model("Niño", ninioSchema);

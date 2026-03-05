@@ -1,5 +1,5 @@
 import {
-  crearNinioService,
+  registrarNinioService,
   getNiniosService,
   getNinioByNameService,
   actualizarNinioService,
@@ -7,7 +7,7 @@ import {
 } from "../services/ninio.services.js";
 
 export const registrarNinioController = async (req, res) => {
-  const ninioCreado = await crearNinioService(req, res);
+  const ninioCreado = await registrarNinioService(req, res);
   res.status(201).json(ninioCreado);
 };
 

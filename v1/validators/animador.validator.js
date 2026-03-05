@@ -105,20 +105,15 @@ export const actualizarUsuarioSchema = Joi.object({
       "any.only":
         "La división debe ser una de las siguientes: chiquitos, medianitos, medianos, grandes",
     }),
-  recorrida: Joi.string()
-    .valid("rojo", "azul", "naranja", "amarillo")
+  recorrida: Joi.array()
+    .items(Joi.string().valid("rojo", "azul", "naranja", "amarillo"))
     .messages({
       "string.base": "La recorrida debe ser una de las opciones válidas",
       "any.only":
         "La recorrida debe ser una de las siguientes: rojo, azul, naranja, amarillo",
     }),
   roles: Joi.array()
-    .items(
-      Joi.string().valid(
-        "animador",
-        "coordinador"
-      ),
-    )
+    .items(Joi.string().valid("animador", "coordinador"))
     .messages({
       "array.base": "Los roles deben ser un arreglo",
       "any.only":

@@ -1,11 +1,13 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const divisionSchema = new mongoose.Schema({
+const { Schema } = mongoose;
+
+const divisionSchema = new Schema({
   nombre: String,
   edad_minima: Number,
   edad_maxima: Number,
-  listadeninios: [{ type: mongoose.Schema.Types.ObjectId, ref: "Niño" }],
+  listadeninios: [{ type: Schema.Types.ObjectId, ref: "Niño" }],
   animadores: [{ type: mongoose.Schema.Types.ObjectId, ref: "Animador" }],
 });
 
-module.exports = mongoose.model("Division", divisionSchema);
+export default mongoose.model("Division", divisionSchema);

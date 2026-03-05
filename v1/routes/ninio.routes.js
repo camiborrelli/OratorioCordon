@@ -6,16 +6,24 @@ import {
   eliminarNinioController,
 } from "../controllers/ninio.controller.js";
 
-import { authMiddleware } from "../middlewares/auth.middleware.js";
+import { authMiddleware } from "../middlewares/auth.js";
 
 const router = express.Router();
 
-import { validateBody } from "../middlewares/validation.middleware.js";
-import { ninioSchema } from "../schemas/ninio.schema.js";
+import { validateBody } from "../middlewares/validateBody.middleware.js";
+import {
+  registrarNinioSchema,
+  actualizarNinioSchema,
+} from "../validators/ninio.validator.js";
 
 router.get("/", obtenerNiniosController);
-router.post("/", validateBody(ninioSchema), registrarNinioController);
-router.put("/:id", validateBody(ninioSchema), actualizarNinioController);
-router.delete("/:id", validateBody(ninioSchema), eliminarNinioController);
+router.post("/", validateBody(registrarNinioSchema), registrarNinioController);
+router.put(
+  "/:id",
+  validateBody(actualizarNinioSchema),
+  actualizarNinioController,
+);
+// No body validation needed for delete by id; remove undefined `ninioSchema`
+router.delete("/:id", eliminarNinioController);
 
 export default router;

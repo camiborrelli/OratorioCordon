@@ -1,10 +1,12 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const coordinadorSchema = new mongoose.Schema({
+const { Schema } = mongoose;
+
+const coordinadorSchema = new Schema({
   nombre: String,
   apellido: String,
   email: String,
   password: String,
 });
 
-module.exports = mongoose.model("Coordinador", coordinadorSchema);
+export default mongoose.model("Coordinador", coordinadorSchema);

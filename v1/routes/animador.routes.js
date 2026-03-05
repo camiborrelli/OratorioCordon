@@ -2,6 +2,7 @@ import express from "express";
 import {
   crearAnimadorController,
   obtenerAnimadoresController,
+  loginAnimadorController,
   verPerfilController,
   actualizarAnimadorController,
 } from "../controllers/animador.controller.js";
@@ -20,6 +21,9 @@ router.post(
   validateBody(registrarUsuarioSchema),
   crearAnimadorController,
 );
+
+// Login (no necesita el esquema completo de registro)
+router.post("/login", loginAnimadorController);
 
 // List
 router.get("/", obtenerAnimadoresController);
