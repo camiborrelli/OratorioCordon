@@ -5,6 +5,7 @@ import {
   obtenerRecorridaPorIdController,
   actualizarRecorridaController,
   eliminarRecorridaController,
+  contarRecorridasController,
 } from "../controllers/recorrida.controller.js";
 
 const router = express.Router();
@@ -20,6 +21,8 @@ router.post(
   crearRecorridaController,
 );
 router.get("/", obtenerRecorridasController);
+// `/cantidad` must come before `/:id` to avoid being captured as an `id` param
+router.get("/cantidad", contarRecorridasController);
 router.get("/:id", obtenerRecorridaPorIdController);
 router.put(
   "/:id",

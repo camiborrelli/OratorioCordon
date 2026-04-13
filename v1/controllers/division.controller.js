@@ -4,6 +4,7 @@ import {
   getDivisionByNameService,
   updateDivisionService,
   deleteDivisionService,
+  contarDivisionesService,
 } from "../services/division.services.js";
 
 export const getDivisionesController = async (req, res) => {
@@ -30,4 +31,9 @@ export const actualizarDivisionController = async (req, res) => {
 export const eliminarDivisionController = async (req, res) => {
   const resultadoEliminacion = await deleteDivisionService(req, res);
   res.json(resultadoEliminacion);
+};
+
+export const contarDivisionesController = async (req, res) => {
+  const count = await contarDivisionesService();
+  res.json({ count });
 };

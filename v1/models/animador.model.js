@@ -7,15 +7,20 @@ export const AnimadorSchema = new Schema({
   apellido: String,
   apodo: String,
   email: String,
-  edad: Number,
-  fechaCumple: Date,
-  restricciones: String,
   password: String,
-  division: String,
-  recorrida: String, // valores: rojo, azul, naranja, amarillo
+  division: {
+    type: String,
+    enum: ["chiquitos", "medianitos", "medianos", "grandes"],
+    required: true,
+  },
+  recorrida: {
+    type: String,
+    enum: ["rojo", "azul", "naranja", "amarillo"],
+    required: true,
+  },
   roles: {
     type: [String],
-    enum: ["animador", "coordinador_general", "coordinador_A", "coordinador_B"],
+    enum: ["animador", "coordinador", "economo", "admin"],
     default: ["animador"],
   },
 });

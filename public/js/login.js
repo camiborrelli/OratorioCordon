@@ -40,11 +40,15 @@
       }
 
       const data = await res.json();
-      // Guardar token y redirigir
+      // Guardar token y redirigir según roles devueltos por el servidor
       if (data.token) {
         localStorage.setItem("token", data.token);
-        // redirect depending on role
-        if (selectedRole === "coordinador") {
+        // Save apodo for frontend use
+        if (data.user && data.user.apodo) {
+          localStorage.setItem("apodo", data.user.apodo);
+        }
+        const roles = (data.user && data.user.roles) || [];
+        if (roles.includes("coordinador")) {
           window.location.href = "/coord-dashboard.html";
         } else {
           window.location.href = "/animador-dashboard.html";

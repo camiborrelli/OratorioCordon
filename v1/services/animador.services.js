@@ -1,6 +1,8 @@
 import Animador from "../models/animador.model.js";
+import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import Recorrida from "../models/recorrida.model.js";
 
 const JWT_SECRET = process.env.JWT_SECRET || "changeme";
 
@@ -8,13 +10,22 @@ export const getAnimadoresService = async () => {
   return await Animador.find();
 };
 
-export const registerService = async ({ nombre, email, password, roles }) => {
-  if (!nombre || !email || !password) {
-    const err = new Error("Nombre, email y password son requeridos");
-    err.status = 400;
-    throw err;
-  }
+export const contarAnimadoresService = async () => {
+  return await Animador.countDocuments();
+};
 
+export const registerService = async ({
+  nombre,
+  apellido,
+  apodo,
+  email,
+  password,
+  fechaCumple,
+  division,
+  recorrida,
+  restricciones,
+  roles,
+}) => {
   const usuarioExistente = await Animador.findOne({ email });
   if (usuarioExistente) {
     const error = new Error("Usuario o email ya existe");
@@ -27,6 +38,10 @@ export const registerService = async ({ nombre, email, password, roles }) => {
   const nuevoUsuario = new Animador({
     nombre,
     email,
+    apellido,
+    apodo,
+    division,
+    recorrida,
     password: hashedPassword,
     roles: roles && roles.length ? roles : ["animador"],
   });
@@ -41,7 +56,9 @@ export const registerService = async ({ nombre, email, password, roles }) => {
     },
   );
 
-  return { user: nuevoUsuario.toObject(), token };
+  const userObj = nuevoUsuario.toObject();
+  delete userObj.password;
+  return { user: userObj, token };
 };
 
 export const loginAnimadorService = async ({ email, password }) => {
@@ -52,7 +69,14 @@ export const loginAnimadorService = async ({ email, password }) => {
   }
 
   const animador = await Animador.findOne({ email });
-  if (!animador || !(await bcrypt.compare(password, animador.password))) {
+
+  if (!animador) {
+    const err = new Error("Credenciales inválidas");
+    err.status = 401;
+    throw err;
+  }
+
+  if (!animador.password) {
     const err = new Error("Credenciales inválidas");
     err.status = 401;
     throw err;
@@ -66,10 +90,25 @@ export const loginAnimadorService = async ({ email, password }) => {
     },
   );
 
-  return { user: animador.toObject(), token };
+  return {
+    user: {
+      id: animador._id,
+      email: animador.email,
+      division: animador.division,
+      apodo: animador.apodo,
+    },
+    token,
+  };
 };
 
 export const getAnimadorByIdService = async (id) => {
+  // Validate id before querying to avoid Mongoose Cast errors
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    const err = new Error("ID inválido");
+    err.status = 400;
+    throw err;
+  }
+
   const animador = await Animador.findById(id);
   if (!animador) {
     const err = new Error("Animador no encontrado");
@@ -86,16 +125,21 @@ export const updateAnimadorService = async (id, data) => {
     "apodo",
     "email",
     "edad",
-    "fechaCumple",
-    "restricciones",
     "division",
     "recorrida",
     "roles",
   ];
 
+  // Normalize recorrida: accept array or string from client, but store as string
+  const normalized = { ...data };
+  if (Array.isArray(normalized.recorrida)) {
+    normalized.recorrida =
+      normalized.recorrida.length > 0 ? normalized.recorrida[0] : undefined;
+  }
+
   const patch = {};
   for (const key of allowed) {
-    if (key in data) patch[key] = data[key];
+    if (key in normalized) patch[key] = normalized[key];
   }
 
   const animadorActualizado = await Animador.findByIdAndUpdate(id, patch, {
@@ -109,10 +153,22 @@ export const updateAnimadorService = async (id, data) => {
   return animadorActualizado;
 };
 
+export const eliminarAnimadorService = async (id) => {
+  const animadorEliminado = await Animador.findByIdAndDelete(id);
+  if (!animadorEliminado) {
+    const err = new Error("Animador no encontrado");
+    err.status = 404;
+    throw err;
+  }
+  return animadorEliminado;
+};
+
 export default {
   getAnimadoresService,
   registerService,
   loginAnimadorService,
   getAnimadorByIdService,
   updateAnimadorService,
+  contarAnimadoresService,
+  eliminarAnimadorService,
 };

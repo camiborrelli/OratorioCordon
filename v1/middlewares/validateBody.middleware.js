@@ -25,7 +25,7 @@ export const validateBody = (schema) => (req, res, next) => {
 
   const { error, value } = schema.validate(pre, {
     abortEarly: false,
-    convert: false,
+    convert: true,
   });
 
   if (error) {

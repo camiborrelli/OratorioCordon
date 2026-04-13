@@ -49,3 +49,8 @@ export const deleteDivisionService = async (req, res) => {
   }
   res.json({ message: "División eliminada correctamente" });
 };
+
+export const contarDivisionesService = async () => {
+  const count = await Division.countDocuments();
+  return count;
+};

@@ -9,6 +9,17 @@ export const getCoordinadoresService = async (req, res) => {
   }
 };
 
+export const crearCoordinadorService = async (req, res) => {
+  const { nombre, apellido, email } = req.body;
+  const nuevoCoordinador = new Coordinador({ nombre, apellido, email });
+  try {
+    const coordinadorGuardado = await nuevoCoordinador.save();
+    res.status(201).json(coordinadorGuardado);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 export const eliminarAnimadorService = async (req, res) => {
   const { id } = req.params;
   try {

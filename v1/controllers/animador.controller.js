@@ -4,6 +4,7 @@ import {
   loginAnimadorService,
   getAnimadorByIdService,
   updateAnimadorService,
+  contarAnimadoresService,
 } from "../services/animador.services.js";
 
 export const crearAnimadorController = async (req, res) => {
@@ -13,6 +14,11 @@ export const crearAnimadorController = async (req, res) => {
   } catch (err) {
     res.status(err.status || 500).json({ message: err.message });
   }
+};
+
+export const contarAnimadoresController = async (req, res) => {
+  const count = await contarAnimadoresService();
+  res.json({ count });
 };
 
 export const loginAnimadorController = async (req, res) => {
@@ -57,4 +63,30 @@ export const validarUsuarioTokenController = async (req, res) => {
   res.status(200).json({
     message: "Token valido",
   });
+};
+
+export const eliminarController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const resultado = await eliminarAnimadorService(id);
+    if (!resultado) {
+      return res.status(404).json({ message: "Animador no encontrado" });
+    }
+    res.json({ message: "Animador eliminado correctamente" });
+  } catch (err) {
+    res.status(err.status || 500).json({ message: err.message });
+  }
+};
+
+export const eliminarAnimadorController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const resultado = await eliminarAnimadorService(id);
+    if (!resultado) {
+      return res.status(404).json({ message: "Animador no encontrado" });
+    }
+    res.json({ message: "Animador eliminado correctamente" });
+  } catch (err) {
+    res.status(err.status || 500).json({ message: err.message });
+  }
 };

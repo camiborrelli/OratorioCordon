@@ -7,6 +7,7 @@ const eventoSchema = new Schema({
   fecha: Date,
   descripcion: String,
   lugar: String,
+  animadores: [{ type: Schema.Types.ObjectId, ref: "Animador" }],
 });
 
 export default mongoose.model("Evento", eventoSchema);

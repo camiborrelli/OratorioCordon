@@ -5,7 +5,10 @@ import {
   loginAnimadorController,
   verPerfilController,
   actualizarAnimadorController,
+  contarAnimadoresController,
+  eliminarAnimadorController,
 } from "../controllers/animador.controller.js";
+import { setCordinadorController } from "../controllers/admin.controller.js";
 
 const router = express.Router();
 
@@ -31,14 +34,28 @@ router.get("/", obtenerAnimadoresController);
 // Create (alternative to /register)
 router.post("/", validateBody(registrarUsuarioSchema), crearAnimadorController);
 
-// View profile
-router.get("/:id", verPerfilController);
+// View profile (use /id/:id to avoid colliding with literal routes like /register)
+router.get("/id/:id", verPerfilController);
 
-// Update
+router.get("/cantidad", contarAnimadoresController);
+router.get("/:id", verPerfilController);
+router.post("/:id/:rol", (req, res, next) => {
+  req.body = req.body || {};
+  if (!req.body.rol) req.body.rol = req.params.rol;
+  return setCordinadorController(req, res, next);
+});
 router.put(
   "/:id",
   validateBody(actualizarUsuarioSchema),
   actualizarAnimadorController,
 );
+router.patch("/:id", actualizarAnimadorController);
+// Update
+router.put(
+  "/id/:id",
+  validateBody(actualizarUsuarioSchema),
+  actualizarAnimadorController,
+);
+router.delete("/:id", eliminarAnimadorController);
 
 export default router;

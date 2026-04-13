@@ -8,12 +8,14 @@ import {
   obtenerDivisionPorNombreController,
   actualizarDivisionController,
   eliminarDivisionController,
+  contarDivisionesController,
 } from "../controllers/division.controller.js";
 
 import { registrarDivisionSchema } from "../validators/division.validator.js";
 import { validateBody } from "../middlewares/validateBody.middleware.js";
 
 router.get("/", getDivisionesController);
+router.get("/cantidad", contarDivisionesController);
 router.get("/:nombre", obtenerDivisionPorNombreController);
 router.post(
   "/",

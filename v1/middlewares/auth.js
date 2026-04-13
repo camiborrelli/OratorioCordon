@@ -1,5 +1,8 @@
-// Simple auth middleware for examples (ESM)
-// Accepts an Authorization header with a static token: "Bearer secrettoken"
+import jwt from "jsonwebtoken";
+
+const JWT_SECRET = process.env.JWT_SECRET || "changeme";
+
+// Middleware JWT: verifica Authorization: Bearer <token>
 export function authMiddleware(req, res, next) {
   const authHeader =
     req.headers["authorization"] || req.headers["Authorization"];
@@ -9,11 +12,13 @@ export function authMiddleware(req, res, next) {
   const token = authHeader.startsWith("Bearer ")
     ? authHeader.slice(7)
     : authHeader;
-  // Example: static token check — replace with real verification in production
-  if (token !== process.env.EXAMPLE_TOKEN && token !== "secrettoken") {
+  try {
+    const payload = jwt.verify(token, JWT_SECRET);
+    req.user = payload;
+    return next();
+  } catch (err) {
     return res.status(403).json({ message: "Token inválido" });
   }
-  next();
 }
 
 export default authMiddleware;

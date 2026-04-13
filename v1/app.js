@@ -16,10 +16,11 @@ const errorHandler =
     : errorHandlerModule;
 
 // routes are ESM modules exporting default router when imported via require
-app.use("/ninio", auth, require("../routes/ninio.routes").default);
-app.use("/animador", auth, require("../routes/animador.routes").default);
-app.use("/division", auth, require("../routes/division.routes").default);
-app.use("/evento", auth, require("../routes/evento.routes").default);
+app.use("/ninio", require("../routes/ninio.routes").default);
+app.use("/animador", require("../routes/animador.routes").default);
+app.use("/division", require("../routes/division.routes").default);
+app.use("/evento", require("../routes/evento.routes").default);
+app.use("/recorrida", require("../routes/recorrida.routes").default);
 
 app.get("/health", (req, res) => res.json({ status: "ok" }));
 

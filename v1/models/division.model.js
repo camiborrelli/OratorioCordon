@@ -6,7 +6,7 @@ const divisionSchema = new Schema({
   nombre: String,
   edad_minima: Number,
   edad_maxima: Number,
-  listadeninios: [{ type: Schema.Types.ObjectId, ref: "Niño" }],
+  listadeninios: [{ type: Schema.Types.ObjectId, ref: "Ninio" }],
   animadores: [{ type: mongoose.Schema.Types.ObjectId, ref: "Animador" }],
 });
 

@@ -17,12 +17,15 @@ export const registrarUsuarioSchema = Joi.object({
     "string.empty": "La contraseña es obligatoria",
     "string.min": "La contraseña debe tener al menos 6 caracteres",
   }),
-  edad: Joi.number().integer().min(18).required().messages({
-    "number.base": "La edad debe ser un número",
-    "number.integer": "La edad debe ser un número entero",
-    "number.min": "La edad debe ser al menos 18 años",
-    "number.empty": "La edad es obligatoria",
-  }),
+  telefono: Joi.string()
+    .required()
+    .length(9)
+    .pattern(/^[0-9]{9}$/)
+    .messages({
+      "string.empty": "El teléfono es obligatorio",
+      "string.length": "El teléfono debe tener 9 caracteres",
+      "string.pattern.base": "El teléfono debe contener solo números",
+    }),
   fechaCumple: Joi.date().required().messages({
     "date.base": "La fecha de cumpleaños debe ser una fecha válida",
     "date.empty": "La fecha de cumpleaños es obligatoria",
@@ -51,19 +54,12 @@ export const registrarUsuarioSchema = Joi.object({
       "string.empty": "La recorrida es obligatoria",
     }),
   roles: Joi.array()
-    .items(
-      Joi.string().valid(
-        "animador",
-        "coordinador_general",
-        "coordinador_A",
-        "coordinador_B",
-      ),
-    )
+    .items(Joi.string().valid("animador", "coordinador", "economo", "admin"))
     .default(["animador"])
     .messages({
       "array.base": "Los roles deben ser un arreglo",
       "any.only":
-        "Cada rol debe ser uno de: animador, coordinador_general, coordinador_A, coordinador_B",
+        "Cada rol debe ser uno de: animador, coordinador_general, coordinador_A, coordinador_B, coordinador, economo, admin",
     }),
 });
 
@@ -84,12 +80,14 @@ export const actualizarUsuarioSchema = Joi.object({
     "string.empty": "La contraseña no puede estar vacía",
     "string.min": "La contraseña debe tener al menos 6 caracteres",
   }),
-  edad: Joi.number().integer().min(18).messages({
-    "number.base": "La edad debe ser un número",
-    "number.integer": "La edad debe ser un número entero",
-    "number.min": "La edad debe ser al menos 18 años",
-    "number.empty": "La edad no puede estar vacía",
-  }),
+  telefono: Joi.string()
+    .length(9)
+    .pattern(/^[0-9]{9}$/)
+    .messages({
+      "string.empty": "El teléfono no puede estar vacío",
+      "string.length": "El teléfono debe tener 9 caracteres",
+      "string.pattern.base": "El teléfono debe contener solo números",
+    }),
   fechaCumple: Joi.date().messages({
     "date.base": "La fecha de cumpleaños debe ser una fecha válida",
     "date.empty": "La fecha de cumpleaños no puede estar vacía",
@@ -105,19 +103,25 @@ export const actualizarUsuarioSchema = Joi.object({
       "any.only":
         "La división debe ser una de las siguientes: chiquitos, medianitos, medianos, grandes",
     }),
-  recorrida: Joi.array()
-    .items(Joi.string().valid("rojo", "azul", "naranja", "amarillo"))
+  recorrida: Joi.alternatives()
+    .try(
+      Joi.array().items(
+        Joi.string().valid("rojo", "azul", "naranja", "amarillo"),
+      ),
+      Joi.string().valid("rojo", "azul", "naranja", "amarillo"),
+    )
     .messages({
+      "array.base": "La recorrida debe ser un arreglo o un string",
       "string.base": "La recorrida debe ser una de las opciones válidas",
       "any.only":
         "La recorrida debe ser una de las siguientes: rojo, azul, naranja, amarillo",
     }),
   roles: Joi.array()
-    .items(Joi.string().valid("animador", "coordinador"))
+    .items(Joi.string().valid("animador", "coordinador", "economo", "admin"))
     .messages({
       "array.base": "Los roles deben ser un arreglo",
       "any.only":
-        "Cada rol debe ser uno de: animador, coordinador_general, coordinador_A, coordinador_B",
+        "Cada rol debe ser uno de: animador, coordinador, economo, admin",
     }),
 });
 
