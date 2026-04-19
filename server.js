@@ -6,7 +6,20 @@ import mongoose from "mongoose";
 import cors from "cors";
 
 const app = express();
-app.use(cors());
+
+// CORS: allow list can be set via env `ALLOWED_ORIGINS` (comma-separated)
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || "https://oratorio-cordon-app.vercel.app,http://localhost:5173").split(",");
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // allow non-browser (curl, server-side) requests when origin is undefined
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) !== -1) return callback(null, true);
+      return callback(new Error("Not allowed by CORS"));
+    },
+  }),
+);
+
 app.use(express.json());
 // Servir archivos estáticos (frontend simple)
 app.use(express.static("public"));
