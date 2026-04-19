@@ -1,28 +1,12 @@
 import Ninio from "../models/ninio.model.js";
 import Asistencia from "../models/asistencia.model.js";
 
-export const marcarPresenteController = async (req, res) => {
+export const confirmarAsistenciaController = async (req, res) => {
   try {
     const { ninioId } = req.params;
-    const { fecha, presente } = req.body;
+    const { fecha, status } = req.body;
 
-    const nuevaAsistencia = new Asistencia({ ninio: ninioId, fecha, presente });
-    const asistenciaGuardada = await nuevaAsistencia.save();
-    res.status(201).json(asistenciaGuardada);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-export const marcarAusenteController = async (req, res) => {
-  try {
-    const { ninioId } = req.params;
-    const { fecha } = req.body;
-    const nuevaAsistencia = new Asistencia({
-      ninio: ninioId,
-      fecha,
-      presente: false,
-    });
+    const nuevaAsistencia = new Asistencia({ ninio: ninioId, fecha, status });
     const asistenciaGuardada = await nuevaAsistencia.save();
     res.status(201).json(asistenciaGuardada);
   } catch (error) {
@@ -45,6 +29,19 @@ export const obtenerAsistenciaPorFechaController = async (req, res) => {
     const { fecha } = req.params;
     const asistencias = await contarTotalAsistenciasPorFechaService(fecha);
     res.json(asistencias);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const obtenerCantFaltasPorNinioController = async (req, res) => {
+  try {
+    const { ninioId } = req.params;
+    const ninio = await Ninio.findById(ninioId);
+    if (!ninio) {
+      return res.status(404).json({ message: "Niño no encontrado" });
+    }
+    return res.json({ cantFaltas: ninio.cantFaltas });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

@@ -29,6 +29,9 @@ export const marcarAusenteService = async (ninioId, fecha) => {
       fecha,
       presente: false,
     });
+    const ninio = await Ninio.findById(ninioId);
+    ninio.cantFaltas += 1;
+    await ninio.save();
     const asistenciaGuardada = await nuevaAsistencia.save();
     return asistenciaGuardada;
   } catch (error) {

@@ -23,6 +23,7 @@ const ninioSchema = new Schema({
   fecha_nacimiento: { type: Date },
   foto: { type: String },
   asistencia: [{ type: Schema.Types.ObjectId, ref: "Asistencia" }],
+  cantFaltas: { type: Number, default: 0 },
 });
 
 export default mongoose.model("Ninio", ninioSchema);

@@ -21,6 +21,8 @@ import divisionRoutes from "./v1/routes/division.routes.js";
 import eventoRoutes from "./v1/routes/evento.routes.js";
 import recorridaRoutes from "./v1/routes/recorrida.routes.js";
 import adminRoutes from "./v1/routes/admin.routes.js";
+import reunionRoutes from "./v1/routes/reunion.routes.js";
+import asistenciaRoutes from "./v1/routes/asistencia.routes.js";
 
 app.use("/ninio", ninioRoutes);
 app.use("/ninios", ninioRoutes);
@@ -31,6 +33,8 @@ app.use("/division", divisionRoutes);
 app.use("/evento", eventoRoutes);
 app.use("/recorrida", recorridaRoutes);
 app.use("/admin", adminRoutes);
+app.use("/asistencia", asistenciaRoutes);
+app.use("/reunion", reunionRoutes);
 
 mongoose
   .connect(MONGODB_URI)

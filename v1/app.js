@@ -21,6 +21,8 @@ app.use("/animador", require("../routes/animador.routes").default);
 app.use("/division", require("../routes/division.routes").default);
 app.use("/evento", require("../routes/evento.routes").default);
 app.use("/recorrida", require("../routes/recorrida.routes").default);
+app.use("/asistencia", require("../routes/asistencia.routes").default);
+app.use("/reunion", require("../routes/reunion.routes").default);
 
 app.get("/health", (req, res) => res.json({ status: "ok" }));
 
