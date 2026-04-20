@@ -8,7 +8,9 @@ import cors from "cors";
 const app = express();
 
 // CORS: allow list can be set via env `ALLOWED_ORIGINS` (comma-separated)
-const allowedOrigins = (process.env.ALLOWED_ORIGINS || "https://oratorio-cordon-app.vercel.app,http://localhost:5173").split(",");
+const allowedOrigins = (
+  process.env.ALLOWED_ORIGINS || "https://oratorio-cordon-app.vercel.app"
+).split(",");
 app.use(
   cors({
     origin: (origin, callback) => {
