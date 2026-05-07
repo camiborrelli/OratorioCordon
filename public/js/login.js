@@ -25,7 +25,17 @@
     const payload = { email, password: pwd };
 
     try {
-      const res = await fetch("/animador/login", {
+      // Optional global override for API base URL. Set `window.API_URL` in HTML
+      // (e.g. <script>window.API_URL='https://mi-backend.example.com'</script>)
+      const API_URL =
+        typeof window !== "undefined" && window.API_URL
+          ? String(window.API_URL).replace(/\/$/, "")
+          : "";
+      const endpoint = API_URL
+        ? `${API_URL}/animador/login`
+        : "/animador/login";
+
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
