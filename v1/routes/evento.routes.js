@@ -16,6 +16,7 @@ import {
 
 import { validateBody } from "../middlewares/validateBody.middleware.js";
 import { registrarEventoSchema } from "../validators/evento.validator.js";
+import { soloCordis } from "../middlewares/roles.js";
 
 router.get("/", obtenerEventosController);
 router.get("/:id", obtenerEventoPorIdController);
