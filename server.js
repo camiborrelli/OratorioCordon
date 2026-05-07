@@ -6,7 +6,29 @@ import mongoose from "mongoose";
 import cors from "cors";
 
 const app = express();
-app.use(cors());
+
+// Configure CORS to allow requests from the frontend domain(s).
+// Set ALLOWED_ORIGINS env to a comma-separated list of allowed origins
+// e.g. ALLOWED_ORIGINS=https://oratorio-cordon-9w93neg8h-camilas-projects-2b00654e.vercel.app
+const rawAllowed = process.env.ALLOWED_ORIGINS || "";
+const allowedOrigins = rawAllowed
+  .split(",")
+  .map((s) => s.trim())
+  .filter(Boolean);
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    // allow requests with no origin like curl, server-to-server
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.length === 0 || allowedOrigins.indexOf(origin) !== -1) {
+      return callback(null, true);
+    }
+    return callback(new Error("Not allowed by CORS"));
+  },
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 // Servir archivos estáticos (frontend simple)
 app.use(express.static("public"));
