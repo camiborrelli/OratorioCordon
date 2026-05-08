@@ -33,6 +33,39 @@ app.use(express.json());
 // Servir archivos estáticos (frontend simple)
 app.use(express.static("public"));
 
+// Normalize incoming paths:
+// 1) If request URL contains an accidental duplicated hostname (happens when
+//    frontend baseURL was malformed and produced a path like
+//    /<host>/<host>/animador/login) — try to recover the real API path by
+//    keeping the substring after the last occurrence of '.vercel.app'.
+// 2) If requests come prefixed with '/v1', strip it so existing mount points
+//    (which are registered at '/animador', '/evento', etc.) still match.
+app.use((req, res, next) => {
+  try {
+    // fix duplicated vercel host in path
+    const url = req.url || "";
+    const marker = ".vercel.app";
+    if (url.indexOf(marker) !== -1) {
+      const last = url.lastIndexOf(marker);
+      // keep everything after the last marker
+      const after = url.substring(last + marker.length);
+      if (after && after.startsWith("/")) {
+        req.url = after;
+      }
+    }
+
+    // strip leading /v1 if present so routes mounted without /v1 still work
+    if (req.url.startsWith("/v1/")) {
+      req.url = req.url.replace(/^\/v1/, "");
+    } else if (req.url === "/v1") {
+      req.url = "/";
+    }
+  } catch (e) {
+    // noop — don't block request on normalization error
+  }
+  return next();
+});
+
 const MONGODB_URI =
   process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/oratoriocordon";
 
