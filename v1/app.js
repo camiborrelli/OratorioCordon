@@ -48,6 +48,23 @@ app.use((req, res, next) => {
   return next();
 });
 
+// Debug logging for problematic endpoints — temporary
+app.use((req, res, next) => {
+  try {
+    const path = req.originalUrl || req.url;
+    if (path && path.includes("/animador/login")) {
+      console.log(
+        "[DEBUG] v1/app.js request =>",
+        req.method,
+        path,
+        "headers:",
+        JSON.stringify(req.headers || {}),
+      );
+    }
+  } catch (e) {}
+  return next();
+});
+
 // Example auth middleware applied to protected routes
 const authModule = require("./middlewares/auth");
 const errorHandlerModule = require("./middlewares/errorHandler");

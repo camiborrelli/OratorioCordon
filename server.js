@@ -66,6 +66,23 @@ app.use((req, res, next) => {
   return next();
 });
 
+// Debug logging for problematic endpoints — temporary
+app.use((req, res, next) => {
+  try {
+    const path = req.originalUrl || req.url;
+    if (path && path.includes("/animador/login")) {
+      console.log(
+        "[DEBUG] server.js request =>",
+        req.method,
+        path,
+        "headers:",
+        JSON.stringify(req.headers || {}),
+      );
+    }
+  } catch (e) {}
+  return next();
+});
+
 const MONGODB_URI =
   process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/oratoriocordon";
 
