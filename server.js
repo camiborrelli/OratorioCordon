@@ -60,13 +60,10 @@ app.use((req, res, next) => {
     } else if (req.url === "/v1") {
       req.url = "/";
     }
-  } catch (e) {
-    // noop — don't block request on normalization error
-  }
+  } catch (e) {}
   return next();
 });
 
-// Debug logging for problematic endpoints — temporary
 app.use((req, res, next) => {
   try {
     const path = req.originalUrl || req.url;
