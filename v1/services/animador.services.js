@@ -61,7 +61,9 @@ export const registerService = async ({
   return { user: userObj, token };
 };
 
-export const loginAnimadorService = async ({ email, password }) => {
+export const loginAnimadorService = async (payload = {}) => {
+  const { email, password } = payload;
+
   if (!email || !password) {
     const err = new Error("Email y password son requeridos");
     err.status = 400;
@@ -70,13 +72,14 @@ export const loginAnimadorService = async ({ email, password }) => {
 
   const animador = await Animador.findOne({ email });
 
-  if (!animador) {
+  if (!animador || !animador.password) {
     const err = new Error("Credenciales inválidas");
     err.status = 401;
     throw err;
   }
 
-  if (!animador.password) {
+  const match = await bcrypt.compare(password, animador.password);
+  if (!match) {
     const err = new Error("Credenciales inválidas");
     err.status = 401;
     throw err;
