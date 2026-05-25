@@ -1,27 +1,34 @@
 const express = require("express");
-const cors = require("cors");
-
 const app = express();
 
 // Configure CORS using ALLOWED_ORIGINS env (comma-separated)
-const rawAllowed = process.env.ALLOWED_ORIGINS || "";
-const allowedOrigins = rawAllowed
+const allowedOrigins = (
+  process.env.ALLOWED_ORIGINS ||
+  "http://localhost:5174,https://oratorio-cordon-app.vercel.app"
+)
   .split(",")
   .map((s) => s.trim())
   .filter(Boolean);
 
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.length === 0 || allowedOrigins.indexOf(origin) !== -1) {
-      return callback(null, true);
-    }
-    return callback(new Error("Not allowed by CORS"));
-  },
-  credentials: true,
-};
+// CORS middleware
+app.use((req, res, next) => {
+  if (allowedOrigins.includes(req.headers.origin)) {
+    res.setHeader("Access-Control-Allow-Origin", req.headers.origin);
+  }
 
-app.use(cors(corsOptions));
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, OPTIONS",
+  );
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+  if (req.method === "OPTIONS") {
+    res.sendStatus(200);
+  } else {
+    next();
+  }
+});
+
 app.use(express.json());
 
 // Normalization middleware: fix duplicated hostname segments and optional /v1 prefix

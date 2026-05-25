@@ -17,15 +17,6 @@ export const registrarUsuarioSchema = Joi.object({
     "string.empty": "La contraseña es obligatoria",
     "string.min": "La contraseña debe tener al menos 6 caracteres",
   }),
-  telefono: Joi.string()
-    .required()
-    .length(9)
-    .pattern(/^[0-9]{9}$/)
-    .messages({
-      "string.empty": "El teléfono es obligatorio",
-      "string.length": "El teléfono debe tener 9 caracteres",
-      "string.pattern.base": "El teléfono debe contener solo números",
-    }),
   fechaCumple: Joi.date().required().messages({
     "date.base": "La fecha de cumpleaños debe ser una fecha válida",
     "date.empty": "La fecha de cumpleaños es obligatoria",
