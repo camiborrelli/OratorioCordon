@@ -64,12 +64,7 @@ export const actualizarNinioSchema = Joi.object({
   direccion: Joi.string(),
   foto: Joi.string(),
   observaciones: Joi.string(),
-  division: Joi.string().valid(
-    "chiquitos",
-    "medianitos",
-    "medianos",
-    "grandes",
-  ),
+  division: Joi.alternatives().try(Joi.string(), Joi.object()),
   recorrida: Joi.string().valid("rojo", "azul", "naranja", "amarillo"),
   contactos: Joi.array().items(
     Joi.object({

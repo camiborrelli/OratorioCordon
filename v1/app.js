@@ -2,10 +2,8 @@ const express = require("express");
 const app = express();
 
 // Configure CORS using ALLOWED_ORIGINS env (comma-separated)
-const allowedOrigins = (
-  process.env.ALLOWED_ORIGINS ||
-  "http://localhost:5174,https://oratorio-cordon-app.vercel.app"
-)
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || "http://localhost:5174",
+"http://localhost:5174,https://oratorio-cordon-app.vercel.app")
   .split(",")
   .map((s) => s.trim())
   .filter(Boolean);

@@ -121,6 +121,11 @@ export const getAnimadorByIdService = async (id) => {
   return animador;
 };
 
+export const getAnimadorPorEmail = async (email) => {
+  const animador = await Animador.findOne({ email });
+  return animador;
+};
+
 export const updateAnimadorService = async (id, data) => {
   const allowed = [
     "nombre",
@@ -131,6 +136,7 @@ export const updateAnimadorService = async (id, data) => {
     "division",
     "recorrida",
     "roles",
+    "password",
   ];
 
   // Normalize recorrida: accept array or string from client, but store as string
@@ -138,6 +144,10 @@ export const updateAnimadorService = async (id, data) => {
   if (Array.isArray(normalized.recorrida)) {
     normalized.recorrida =
       normalized.recorrida.length > 0 ? normalized.recorrida[0] : undefined;
+  }
+
+  if (normalized.password) {
+    normalized.password = await bcrypt.hash(normalized.password, 12);
   }
 
   const patch = {};

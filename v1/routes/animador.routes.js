@@ -7,6 +7,8 @@ import {
   actualizarAnimadorController,
   contarAnimadoresController,
   eliminarAnimadorController,
+  cambiarContraseniaSinLoginController,
+  verificarEmail,
 } from "../controllers/animador.controller.js";
 import { setCordinadorController } from "../controllers/admin.controller.js";
 
@@ -34,25 +36,29 @@ router.get("/", obtenerAnimadoresController);
 // Create (alternative to /register)
 router.post("/", validateBody(registrarUsuarioSchema), crearAnimadorController);
 
+router.post("/verificar-email", verificarEmail);
+
 // View profile (use /id/:id to avoid colliding with literal routes like /register)
 router.get("/id/:id", verPerfilController);
 
 router.get("/cantidad", contarAnimadoresController);
-router.get("/:id", verPerfilController);
+router.get("/perfil/:id", verPerfilController);
 router.post("/:id/:rol", (req, res, next) => {
   req.body = req.body || {};
   if (!req.body.rol) req.body.rol = req.params.rol;
   return setCordinadorController(req, res, next);
 });
+
 router.put(
   "/:id",
   validateBody(actualizarUsuarioSchema),
   actualizarAnimadorController,
 );
+router.put("/cambiar-contrasenia/:id", cambiarContraseniaSinLoginController);
 router.patch("/:id", actualizarAnimadorController);
-// Update
+
 router.put(
-  "/id/:id",
+  "/:id",
   validateBody(actualizarUsuarioSchema),
   actualizarAnimadorController,
 );

@@ -4,13 +4,14 @@ import {
   obtenerNiniosController,
   actualizarNinioController,
   eliminarNinioController,
-  subirFotoNinioController,
   obtenerNinioPorNombreController,
   contarNiniosController,
   obtenerNinioPorDivisionController,
   obtenerNinioPorRecorridaController,
   obtenerNinioPorIdController,
   getNiniosCumplenMesController,
+  cambiarDivisionNinioController,
+  getNiniosEliminadosController,
 } from "../controllers/ninio.controller.js";
 
 // import { authMiddleware } from "../middlewares/auth.js";
@@ -38,15 +39,14 @@ router.get("/:nombre", obtenerNinioPorNombreController);
 router.get("/id/:id", obtenerNinioPorIdController);
 router.get("/division/:division", obtenerNinioPorDivisionController);
 router.get("/recorrida/:recorrida", obtenerNinioPorRecorridaController);
+router.get("/eliminados", getNiniosEliminadosController);
 router.post("/", validateBody(registrarNinioSchema), registrarNinioController);
 router.put(
   "/:id",
-  validateBody(actualizarNinioSchema),
+
   actualizarNinioController,
 ); //la ruta completa es https://localhost:3000/ninios/:id
 router.delete("/:id", eliminarNinioController);
-
-// Upload photo for a ninio (multipart/form-data, field `foto`)
-router.post("/:id/foto", upload.single("foto"), subirFotoNinioController);
+router.put("/cambiarDivision/:id", cambiarDivisionNinioController);
 
 export default router;

@@ -1,4 +1,5 @@
 import Ninio from "../models/ninio.model.js";
+import Division from "../models/division.model.js";
 
 export const getNiniosService = async (req, res) => {
   try {
@@ -24,7 +25,6 @@ export const registrarNinioService = async (req, res) => {
     direccion,
     observaciones,
     fechaNacimiento,
-    foto,
   } = req.body;
   // Normalize and validate fechaNacimiento
   let fecha_nacimiento = undefined;
@@ -44,28 +44,55 @@ export const registrarNinioService = async (req, res) => {
       })
     : contactos;
 
+  // Resolve division to its nombre so Ninio.division stays as text
+  let divisionNombre = division;
+  let divisionDoc = null;
+  try {
+    if (division !== undefined && division !== null) {
+      let input = division;
+      if (typeof input === "object" && input !== null) {
+        if (input._id) input = String(input._id);
+        else if (input.id) input = String(input.id);
+        else if (input.nombre) input = String(input.nombre);
+        else input = String(JSON.stringify(input));
+      }
+      input = String(input).trim();
+      if (input && /^[0-9a-fA-F]{24}$/.test(input)) {
+        divisionDoc = await Division.findById(input);
+      } else {
+        const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\\]\\]/g, "\\$&");
+        const regex = new RegExp(`^${escapeRegex(input)}$`, "iu");
+        divisionDoc = await Division.findOne({ nombre: { $regex: regex } });
+      }
+      if (divisionDoc) divisionNombre = divisionDoc.nombre;
+    }
+  } catch (err) {
+    console.error("Error resolviendo división:", err.message);
+  }
+
   const nuevoNinio = new Ninio({
     nombre,
     apellido,
     edad,
     recorrida,
-    division,
+    division: divisionNombre,
     contactos: contactosNormalizados,
     direccion,
     observaciones,
     fecha_nacimiento,
-    foto,
   });
   try {
-    const existente = await Ninio.findOne({ nombre, apellido });
+    const existente = await Ninio.findOne({ nombre });
     if (existente) {
       return res
         .status(409)
-        .json({ message: "Ya existe un niño con ese nombre y apellido" });
+        .json({ message: "Ya existe un niño con ese nombre" });
     }
     const ninioGuardado = await nuevoNinio.save();
     agregarNinioARecorrida(ninioGuardado._id, recorrida);
-    agregarNinioAdivision(ninioGuardado._id, division);
+    if (divisionDoc) {
+      agregarNinioAdivision(ninioGuardado._id, divisionDoc._id);
+    }
     res.status(201).json(ninioGuardado);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -123,7 +150,6 @@ export const actualizarNinioService = async (req, res) => {
     direccion,
     observaciones,
     fechaNacimiento,
-    foto,
   } = req.body;
   // Normalize and validate fechaNacimiento for updates
   let fecha_nacimiento = undefined;
@@ -145,6 +171,35 @@ export const actualizarNinioService = async (req, res) => {
         })
       : contactos;
 
+    // Resolve division input to nombre when updating
+    let divisionNombre = division;
+    let divisionDoc = null;
+    if (division !== undefined && division !== null) {
+      try {
+        let input = division;
+        if (typeof input === "object" && input !== null) {
+          if (input._id) input = String(input._id);
+          else if (input.id) input = String(input.id);
+          else if (input.nombre) input = String(input.nombre);
+          else input = String(JSON.stringify(input));
+        }
+        input = String(input).trim();
+        if (input && /^[0-9a-fA-F]{24}$/.test(input)) {
+          divisionDoc = await Division.findById(input);
+        } else {
+          const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\\]\\]/g, "\\$&");
+          const regex = new RegExp(`^${escapeRegex(input)}$`, "iu");
+          divisionDoc = await Division.findOne({ nombre: { $regex: regex } });
+        }
+        if (divisionDoc) divisionNombre = divisionDoc.nombre;
+      } catch (err) {
+        console.error(
+          "Error resolviendo división en actualización:",
+          err.message,
+        );
+      }
+    }
+
     const ninioActualizado = await Ninio.findByIdAndUpdate(
       id,
       {
@@ -152,12 +207,11 @@ export const actualizarNinioService = async (req, res) => {
         apellido,
         edad,
         recorrida,
-        division,
+        division: divisionNombre,
         contactos: contactosNormalizados,
         direccion,
         observaciones,
         ...(fecha_nacimiento !== undefined ? { fecha_nacimiento } : {}),
-        foto,
       },
       { new: true },
     );
@@ -170,24 +224,7 @@ export const actualizarNinioService = async (req, res) => {
   }
 };
 
-export const subirFotoNinioService = async (req, res) => {
-  const { id } = req.params;
-  try {
-    if (!req.file)
-      return res.status(400).json({ message: "No se recibió archivo" });
-    const rutaPublica = `/uploads/${req.file.filename}`;
-    const ninioActualizado = await Ninio.findByIdAndUpdate(
-      id,
-      { foto: rutaPublica },
-      { new: true },
-    );
-    if (!ninioActualizado)
-      return res.status(404).json({ message: "Niño no encontrado" });
-    res.json(ninioActualizado);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+const niniosEliminados = [];
 
 export const eliminarNinioService = async (req, res) => {
   const { id } = req.params;
@@ -196,10 +233,15 @@ export const eliminarNinioService = async (req, res) => {
     if (!ninioEliminado) {
       return res.status(404).json({ message: "Niño no encontrado" });
     }
+    niniosEliminados.push(ninioEliminado);
     res.json({ message: "Niño eliminado correctamente" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
+};
+
+export const getNiniosEliminadosService = () => {
+  return niniosEliminados;
 };
 
 export const getNiniosCumplenMesService = async (mes) => {

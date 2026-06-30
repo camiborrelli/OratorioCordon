@@ -4,7 +4,6 @@ import {
   getNinioByNameService,
   actualizarNinioService,
   eliminarNinioService,
-  subirFotoNinioService,
   countNiniosService,
   getNiniosCumplenMesService,
 } from "../services/ninio.services.js";
@@ -103,10 +102,6 @@ export const eliminarNinioController = async (req, res) => {
   res.json(resultadoEliminacion);
 };
 
-export const subirFotoNinioController = async (req, res) => {
-  await subirFotoNinioService(req, res);
-};
-
 export const contarNiniosController = async (req, res) => {
   try {
     const count = await countNiniosService();
@@ -136,6 +131,36 @@ export const getNiniosCumplenMesController = async (req, res) => {
   try {
     const ninios = await getNiniosCumplenMesService(mes);
     res.json(ninios);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const cambiarDivisionNinioController = async (req, res) => {
+  const { id } = req.params;
+  const { nuevaDivision } = req.body;
+  const ninio = await Ninio.findById(id);
+  if (!ninio) return res.status(404).json({ message: "Niño no encontrado" });
+
+  try {
+    const division = await Division.findOne({
+      nombre: { $regex: new RegExp(`^${nuevaDivision}$`, "i") },
+    });
+    if (!division) {
+      return res.status(404).json({ message: "División no encontrada" });
+    }
+    ninio.division = division.nombre;
+    await ninio.save();
+    res.json({ message: "División actualizada exitosamente", ninio });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const getNiniosEliminadosController = async (req, res) => {
+  try {
+    const niniosEliminados = await getNiniosEliminadosService();
+    res.json(niniosEliminados);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
