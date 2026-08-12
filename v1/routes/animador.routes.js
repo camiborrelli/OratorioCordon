@@ -9,6 +9,7 @@ import {
   eliminarAnimadorController,
   cambiarContraseniaSinLoginController,
   verificarEmail,
+  getAnimadorByIdController,
 } from "../controllers/animador.controller.js";
 import { setCordinadorController } from "../controllers/admin.controller.js";
 
@@ -25,7 +26,10 @@ router.post(
   "/register",
   validateBody(registrarUsuarioSchema),
   crearAnimadorController,
-);
+); //la ruta completa es http://localhost:3000/api/v1/animadores/register
+
+//obtener animador por id
+router.get("/id/:id", getAnimadorByIdController); //la ruta completa es http://localhost:3000/api/v1/animadores/id/:id
 
 // Login (no necesita el esquema completo de registro)
 router.post("/login", loginAnimadorController);

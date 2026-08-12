@@ -92,6 +92,22 @@ import recorridaRoutes from "./v1/routes/recorrida.routes.js";
 import adminRoutes from "./v1/routes/admin.routes.js";
 import reunionRoutes from "./v1/routes/reunion.routes.js";
 import asistenciaRoutes from "./v1/routes/asistencia.routes.js";
+import {
+  registrarRecordatorioController,
+  obtenerRecordatoriosController,
+} from "./v1/controllers/recordatorio.controller.js";
+import {
+  registrarPlanificacionController,
+  obtenerPlanificacionController,
+} from "./v1/controllers/planificacion.controller.js";
+
+app.get("/recordatorios", obtenerRecordatoriosController);
+app.post("/recordatorio", registrarRecordatorioController);
+app.post("/recordatorios", registrarRecordatorioController);
+app.get("/planificaciones", obtenerPlanificacionController);
+app.get("/planificacion", obtenerPlanificacionController);
+app.post("/planificacion", registrarPlanificacionController);
+app.post("/planificaciones", registrarPlanificacionController);
 
 app.use("/ninio", ninioRoutes);
 app.use("/ninios", ninioRoutes);
@@ -100,6 +116,7 @@ app.use("/animador", animadorRoutes);
 app.use("/animadores", animadorRoutes);
 app.use("/division", divisionRoutes);
 app.use("/evento", eventoRoutes);
+app.use("/eventos", eventoRoutes);
 app.use("/recorrida", recorridaRoutes);
 app.use("/admin", adminRoutes);
 app.use("/asistencia", asistenciaRoutes);

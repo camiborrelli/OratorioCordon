@@ -169,3 +169,13 @@ export const cambiarContraseniaSinLoginController = async (req, res) => {
     });
   }
 };
+
+export const getAnimadorByIdController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const animador = await getAnimadorByIdService(id);
+    res.json(animador);
+  } catch (err) {
+    res.status(err.status || 500).json({ message: err.message });
+  }
+};

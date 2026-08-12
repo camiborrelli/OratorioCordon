@@ -22,9 +22,7 @@ export const registrarUsuarioSchema = Joi.object({
     "date.empty": "La fecha de cumpleaños es obligatoria",
   }),
   apodo: Joi.string(),
-  restricciones: Joi.string().allow("").messages({
-    "string.base": "Las restricciones deben ser una cadena de texto",
-  }),
+
   division: Joi.string()
     .required()
     .valid("chiquitos", "medianitos", "medianos", "grandes")
@@ -37,11 +35,11 @@ export const registrarUsuarioSchema = Joi.object({
     }),
   recorrida: Joi.string()
     .required()
-    .valid("rojo", "azul", "naranja", "amarillo")
+    .valid("roja", "azul", "naranja", "amarilla")
     .messages({
       "string.base": "La recorrida debe ser una de las opciones válidas",
       "any.only":
-        "La recorrida debe ser una de las siguientes: rojo, azul, naranja, amarillo",
+        "La recorrida debe ser una de las siguientes: roja, azul, naranja, amarilla",
       "string.empty": "La recorrida es obligatoria",
     }),
   roles: Joi.array()

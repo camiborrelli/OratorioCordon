@@ -15,9 +15,10 @@ export const AnimadorSchema = new Schema({
   },
   recorrida: {
     type: String,
-    enum: ["rojo", "azul", "naranja", "amarillo"],
+    enum: ["roja", "azul", "naranja", "amarilla"],
     required: true,
   },
+  fechaCumple: Date,
   roles: {
     type: [String],
     enum: ["animador", "coordinador", "economo", "admin"],

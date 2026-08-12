@@ -87,6 +87,8 @@ app.use("/evento", require("../routes/evento.routes").default);
 app.use("/recorrida", require("../routes/recorrida.routes").default);
 app.use("/asistencia", require("../routes/asistencia.routes").default);
 app.use("/reunion", require("../routes/reunion.routes").default);
+app.use("/recordatorios", require("../routes/recordatorio.routes").default);
+app.use("/planificacion", require("../routes/planificacion.routes").default);
 
 app.get("/health", (req, res) => res.json({ status: "ok" }));
 

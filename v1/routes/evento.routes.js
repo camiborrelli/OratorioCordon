@@ -21,21 +21,28 @@ import {
 import {
   registrarRecordatorioController,
   obtenerRecordatoriosController,
+  editarRecordatorioController,
+  marcarComoCompletadoController,
 } from "../controllers/recordatorio.controller.js";
 
 import { validateBody } from "../middlewares/validateBody.middleware.js";
 import { registrarEventoSchema } from "../validators/evento.validator.js";
-import { soloCordis } from "../middlewares/roles.js";
 
 router.get("/", obtenerEventosController);
-router.get("/planificacion", obtenerPlanificacionController);
 router.get("/recordatorios", obtenerRecordatoriosController);
+router.put("/recordatorios/:id", editarRecordatorioController);
+router.get("/planificacion", obtenerPlanificacionController);
+router.get("/planificaciones", obtenerPlanificacionController);
+router.post("/recordatorio", registrarRecordatorioController);
+router.post("/recordatorios", registrarRecordatorioController);
+router.post("/planificacion", registrarPlanificacionController);
+router.post("/planificaciones", registrarPlanificacionController);
+
 router.get("/:id", obtenerEventoPorIdController);
 router.post("/:id/animadores/:animadorId", agregarAnimadorAEventoController);
 router.get("/:id/animadores", getAnimadoresDeEventoController);
 router.post("/", validateBody(registrarEventoSchema), crearEventoController);
-router.post("/planificacion", soloCordis, registrarPlanificacionController);
-router.post("/recordatorios", soloCordis, registrarRecordatorioController);
+
 router.delete(
   "/:id/animadores/:animadorId",
   removeAnimadorFromEventoController,
@@ -48,5 +55,7 @@ router.put(
 router.put("/:id", actualizarEventoController);
 router.delete("/:id", eliminarEventoController);
 router.get("/contar", contarEventosController);
+
+router.post("/recordatorios/:id/hecho", marcarComoCompletadoController);
 
 export default router;

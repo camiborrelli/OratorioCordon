@@ -3,10 +3,38 @@ import Recordatorio from "../models/recordatorio.model.js";
 export const registrarRecordatorioService = async (req, res) => {
   try {
     const { titulo, descripcion } = req.body;
+
+    if (!titulo || !descripcion) {
+      return res.status(400).json({
+        message: "Título y descripción son obligatorios",
+      });
+    }
+
     const nuevoRecordatorio = new Recordatorio({ titulo, descripcion });
-    await nuevoRecordatorio.save();
-    res.status(201).json(nuevoRecordatorio);
+    const recordatorioGuardado = await nuevoRecordatorio.save();
+    return res.status(201).json(recordatorioGuardado);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const editarRecordatorioService = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { titulo, descripcion } = req.body;
+    const recordatorio = await Recordatorio.findById(id);
+
+    if (!recordatorio) {
+      return res.status(404).json({ message: "Recordatorio no encontrado" });
+    }
+
+    const recordatorioActualizado = await Recordatorio.findByIdAndUpdate(
+      id,
+      { titulo, descripcion },
+      { new: true },
+    );
+    return res.status(200).json(recordatorioActualizado);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
   }
 };

@@ -23,7 +23,6 @@ export const registerService = async ({
   fechaCumple,
   division,
   recorrida,
-  restricciones,
   roles,
 }) => {
   const usuarioExistente = await Animador.findOne({ email });
@@ -42,6 +41,7 @@ export const registerService = async ({
     apodo,
     division,
     recorrida,
+    fechaCumple,
     password: hashedPassword,
     roles: roles && roles.length ? roles : ["animador"],
   });
@@ -99,6 +99,7 @@ export const loginAnimadorService = async (payload = {}) => {
       email: animador.email,
       division: animador.division,
       apodo: animador.apodo,
+      rol: animador.roles,
     },
     token,
   };
