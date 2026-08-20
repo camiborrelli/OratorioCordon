@@ -10,6 +10,7 @@ import {
   cambiarContraseniaSinLoginController,
   verificarEmail,
   getAnimadorByIdController,
+  quitarRolController,
 } from "../controllers/animador.controller.js";
 import { setCordinadorController } from "../controllers/admin.controller.js";
 
@@ -41,6 +42,8 @@ router.get("/", obtenerAnimadoresController);
 router.post("/", validateBody(registrarUsuarioSchema), crearAnimadorController);
 
 router.post("/verificar-email", verificarEmail);
+
+router.post("/:id/quitarRol", quitarRolController);
 
 // View profile (use /id/:id to avoid colliding with literal routes like /register)
 router.get("/id/:id", verPerfilController);

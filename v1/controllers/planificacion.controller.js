@@ -17,3 +17,17 @@ export const obtenerPlanificacionController = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const eliminarPlanificacionController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const planificacion = await Planificacion.findById(id);
+    if (!planificacion) {
+      return res.status(404).json({ message: "Planificación no encontrada" });
+    }
+    await planificacion.remove();
+    res.json({ message: "Planificación eliminada correctamente" });
+  } catch (error) {
+    res.status(error.status || 500).json({ message: error.message });
+  }
+};

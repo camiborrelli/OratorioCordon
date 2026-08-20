@@ -186,3 +186,15 @@ export default {
   contarAnimadoresService,
   eliminarAnimadorService,
 };
+
+export const quitarRolService = async (id) => {
+  const animador = await Animador.findById(id);
+  if (!animadorEliminado) {
+    const err = new Error("Animador no encontrado");
+    err.status = 404;
+    throw err;
+  }
+  animador.roles = ["animador"];
+  animador.save();
+  return animador;
+};

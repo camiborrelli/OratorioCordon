@@ -17,12 +17,14 @@ import {
 import {
   registrarPlanificacionController,
   obtenerPlanificacionController,
+  eliminarPlanificacionController,
 } from "../controllers/planificacion.controller.js";
 import {
   registrarRecordatorioController,
   obtenerRecordatoriosController,
   editarRecordatorioController,
   marcarComoCompletadoController,
+  eliminarRecordatorioController,
 } from "../controllers/recordatorio.controller.js";
 
 import { validateBody } from "../middlewares/validateBody.middleware.js";
@@ -57,5 +59,7 @@ router.delete("/:id", eliminarEventoController);
 router.get("/contar", contarEventosController);
 
 router.post("/recordatorios/:id/hecho", marcarComoCompletadoController);
+router.delete("/recordatorios/:id", eliminarRecordatorioController);
+router.delete("/planificaciones/:id", eliminarPlanificacionController);
 
 export default router;

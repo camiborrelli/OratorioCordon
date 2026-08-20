@@ -7,6 +7,7 @@ import {
   contarAnimadoresService,
   eliminarAnimadorService,
   getAnimadorPorEmail,
+  quitarRolService,
 } from "../services/animador.services.js";
 
 import Animador from "../models/animador.model.js";
@@ -175,6 +176,17 @@ export const getAnimadorByIdController = async (req, res) => {
     const { id } = req.params;
     const animador = await getAnimadorByIdService(id);
     res.json(animador);
+  } catch (err) {
+    res.status(err.status || 500).json({ message: err.message });
+  }
+};
+
+export const quitarRolController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const animador = await getAnimadorByIdService(id);
+    const animadorNoCordi = await quitarRolService(id);
+    res.json(animadorNoCordi);
   } catch (err) {
     res.status(err.status || 500).json({ message: err.message });
   }

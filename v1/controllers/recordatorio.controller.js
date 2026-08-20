@@ -49,3 +49,19 @@ export const marcarComoCompletadoController = async (req, res) => {
     }
   }
 };
+
+export const eliminarRecordatorioController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const recordatorio = await Recordatorio.findById(id);
+    if (!recordatorio) {
+      return res.status(404).json({ message: "Recordatorio no encontrado" });
+    }
+    await recordatorio.remove();
+    res.json({ message: "Recordatorio eliminado correctamente" });
+  } catch (error) {
+    if (!res.headersSent) {
+      res.status(error.status || 500).json({ message: error.message });
+    }
+  }
+};
