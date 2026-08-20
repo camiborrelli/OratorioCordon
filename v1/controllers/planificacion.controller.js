@@ -25,7 +25,7 @@ export const eliminarPlanificacionController = async (req, res) => {
     if (!planificacion) {
       return res.status(404).json({ message: "Planificación no encontrada" });
     }
-    await planificacion.remove();
+    const planificaionEliminada = await Planificacion.findByIdAndDelete(id);
     res.json({ message: "Planificación eliminada correctamente" });
   } catch (error) {
     res.status(error.status || 500).json({ message: error.message });
