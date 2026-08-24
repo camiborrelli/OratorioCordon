@@ -38,3 +38,12 @@ export const editarRecordatorioService = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+export const eliminarRecordatorioService = async (id) => {
+  try {
+    const recordatorio = await Recordatorio.findByIdAndDelete(id);
+    return recordatorio;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};

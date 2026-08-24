@@ -1,4 +1,7 @@
-import { registrarPlanificacionServices } from "../services/planificacion.services.js";
+import {
+  registrarPlanificacionServices,
+  eliminarPlanificacionServices,
+} from "../services/planificacion.services.js";
 import Planificacion from "../models/planificacion.model.js";
 
 export const registrarPlanificacionController = async (req, res) => {
@@ -21,12 +24,11 @@ export const obtenerPlanificacionController = async (req, res) => {
 export const eliminarPlanificacionController = async (req, res) => {
   try {
     const { id } = req.params;
-    const planificacion = await Planificacion.findById(id);
-    if (!planificacion) {
+    const planificacionEliminada = await eliminarPlanificacionServices(id);
+    if (!planificacionEliminada) {
       return res.status(404).json({ message: "Planificación no encontrada" });
     }
-    const planificaionEliminada = await Planificacion.findByIdAndDelete(id);
-    res.json({ message: "Planificación eliminada correctamente" });
+    res.status(200).json({ message: "Planificación eliminada correctamente" });
   } catch (error) {
     res.status(error.status || 500).json({ message: error.message });
   }

@@ -1,6 +1,7 @@
 import {
   registrarRecordatorioService,
   editarRecordatorioService,
+  eliminarRecordatorioService,
 } from "../services/recordatorio.services.js";
 import Recordatorio from "../models/recordatorio.model.js";
 
@@ -53,12 +54,11 @@ export const marcarComoCompletadoController = async (req, res) => {
 export const eliminarRecordatorioController = async (req, res) => {
   try {
     const { id } = req.params;
-    const recordatorio = await Recordatorio.findById(id);
+    const recordatorio = await eliminarRecordatorioService(id);
     if (!recordatorio) {
       return res.status(404).json({ message: "Recordatorio no encontrado" });
     }
-    await recordatorio.remove();
-    res.json({ message: "Recordatorio eliminado correctamente" });
+    res.status(200).json({ message: "Recordatorio eliminado correctamente" });
   } catch (error) {
     if (!res.headersSent) {
       res.status(error.status || 500).json({ message: error.message });

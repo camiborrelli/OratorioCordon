@@ -60,6 +60,6 @@ router.get("/contar", contarEventosController);
 
 router.post("/recordatorios/:id/hecho", marcarComoCompletadoController);
 router.delete("/recordatorios/:id", eliminarRecordatorioController);
-router.delete("/planificaciones/:id", eliminarPlanificacionController); //la ruta es
+router.delete("/planificaciones/:id", eliminarPlanificacionController);
 
 export default router;
