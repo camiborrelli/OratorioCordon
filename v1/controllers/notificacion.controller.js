@@ -33,3 +33,16 @@ export async function marcarTodasLeidasController(req, res) {
     res.status(500).json({ message: error.message });
   }
 }
+
+export async function eliminarNotificacionController(req, res) {
+  try {
+    const notificacion = await Notificacion.findOneAndDelete({
+      _id: req.params.id,
+      destinatario: req.user.id,
+    });
+    if (!notificacion) return res.status(404).json({ message: "Notificación no encontrada" });
+    res.json({ message: "Notificación eliminada" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}

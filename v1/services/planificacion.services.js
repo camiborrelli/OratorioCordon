@@ -37,7 +37,7 @@ export const eliminarPlanificacionServices = async (id) => {
     if (!planificacion) {
       return null;
     }
-    res.status(200).json({ message: "Planificación eliminada correctamente" });
+    return planificacion;
   } catch (error) {
     throw error;
   }
