@@ -189,12 +189,16 @@ export default {
 
 export const quitarRolService = async (id) => {
   const animador = await Animador.findById(id);
-  if (!animadorEliminado) {
+
+  if (!animador) {
     const err = new Error("Animador no encontrado");
     err.status = 404;
     throw err;
   }
-  animador.roles = ["animador"];
-  animador.save();
+
+  animador.roles.pull("coordinador");
+
+  await animador.save();
+
   return animador;
 };
