@@ -1,4 +1,5 @@
 import Planificacion from "../models/planificacion.model.js";
+import { notificarATodos } from "./notificacion.services.js";
 
 export const registrarPlanificacionServices = async (req, res) => {
   try {
@@ -19,6 +20,11 @@ export const registrarPlanificacionServices = async (req, res) => {
       buenasTardes,
     });
     await nuevaPlanificacion.save();
+    await notificarATodos({
+      tipo: "planificacion",
+      titulo: "Nueva planificación",
+      mensaje: `Se agregó la planificación \"${nuevaPlanificacion.Tema}\".`,
+    });
     res.status(201).json(nuevaPlanificacion);
   } catch (error) {
     res.status(500).json({ message: error.message });

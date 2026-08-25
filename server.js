@@ -92,6 +92,7 @@ import recorridaRoutes from "./v1/routes/recorrida.routes.js";
 import adminRoutes from "./v1/routes/admin.routes.js";
 import reunionRoutes from "./v1/routes/reunion.routes.js";
 import asistenciaRoutes from "./v1/routes/asistencia.routes.js";
+import notificacionRoutes from "./v1/routes/notificacion.routes.js";
 import {
   registrarRecordatorioController,
   obtenerRecordatoriosController,
@@ -121,6 +122,7 @@ app.use("/recorrida", recorridaRoutes);
 app.use("/admin", adminRoutes);
 app.use("/asistencia", asistenciaRoutes);
 app.use("/reunion", reunionRoutes);
+app.use("/notificaciones", notificacionRoutes);
 
 mongoose
   .connect(MONGODB_URI)

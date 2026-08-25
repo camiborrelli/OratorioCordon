@@ -1,5 +1,6 @@
 import Admin from "../models/admin.model.js";
 import Animador from "../models/animador.model.js";
+import { crearNotificaciones } from "../services/notificacion.services.js";
 
 export const setCordinadorController = async (req, res) => {
   const { id } = req.params;
@@ -24,6 +25,14 @@ export const setCordinadorController = async (req, res) => {
   }
 
   await animador.save();
+  if (action === "add") {
+    await crearNotificaciones({
+      destinatarios: [animador._id],
+      tipo: "rol",
+      titulo: "Rol asignado",
+      mensaje: `Se te asignó el rol de ${rol}.`,
+    });
+  }
   res.json({
     message: `Animador ${id} actualizado. Roles: ${animador.roles.join(",")}`,
   });
@@ -48,5 +57,11 @@ export const setRolesController = async (req, res) => {
     return res.status(404).json({ message: "Animador no encontrado" });
   animador.roles = roles;
   await animador.save();
+  await crearNotificaciones({
+    destinatarios: [animador._id],
+    tipo: "rol",
+    titulo: "Roles actualizados",
+    mensaje: `Tus roles ahora son: ${animador.roles.join(", ") || "sin roles"}.`,
+  });
   res.json({ message: `Roles actualizados`, roles: animador.roles });
 };

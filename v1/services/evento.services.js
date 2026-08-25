@@ -1,5 +1,6 @@
 import Evento from "../models/evento.model.js";
 import Animador from "../models/animador.model.js";
+import { notificarATodos } from "./notificacion.services.js";
 
 export const getEventosService = async (req, res) => {
   try {
@@ -16,6 +17,11 @@ export const createEventoService = async (req, res) => {
   const nuevoEvento = new Evento({ nombre, fecha: fechaParsed, descripcion, lugar });
 
   const eventoGuardado = await nuevoEvento.save();
+  await notificarATodos({
+    tipo: "evento",
+    titulo: "Nuevo evento",
+    mensaje: `Se agregó el evento \"${eventoGuardado.nombre}\"${eventoGuardado.lugar ? ` en ${eventoGuardado.lugar}` : ""}.`,
+  });
   res.status(201).json(eventoGuardado);
 };
 

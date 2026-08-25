@@ -1,4 +1,5 @@
 import Recordatorio from "../models/recordatorio.model.js";
+import { notificarATodos } from "./notificacion.services.js";
 
 export const registrarRecordatorioService = async (req, res) => {
   try {
@@ -12,6 +13,11 @@ export const registrarRecordatorioService = async (req, res) => {
 
     const nuevoRecordatorio = new Recordatorio({ titulo, descripcion });
     const recordatorioGuardado = await nuevoRecordatorio.save();
+    await notificarATodos({
+      tipo: "recordatorio",
+      titulo: "Nuevo recordatorio",
+      mensaje: `${recordatorioGuardado.titulo}: ${recordatorioGuardado.descripcion}`,
+    });
     return res.status(201).json(recordatorioGuardado);
   } catch (error) {
     return res.status(500).json({ message: error.message });
