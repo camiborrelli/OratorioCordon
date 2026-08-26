@@ -1,4 +1,4 @@
-import { Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const AsistenciaSchema = new Schema(
   {
@@ -14,6 +14,6 @@ const AsistenciaSchema = new Schema(
   { timestamps: true },
 );
 
-export default AsistenciaSchema;
-
 AsistenciaSchema.index({ ninio: 1, fecha: 1 }, { unique: true });
+
+export default mongoose.model("Asistencia", AsistenciaSchema);

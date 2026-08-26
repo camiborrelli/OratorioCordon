@@ -13,18 +13,30 @@ import Division from "../models/division.model.js";
 import mongoose from "mongoose";
 
 export const registrarNinioController = async (req, res) => {
-  const ninioCreado = await registrarNinioService(req, res);
-  res.status(201).json(ninioCreado);
+  try {
+    const ninioCreado = await registrarNinioService(req.body);
+    res.status(201).json(ninioCreado);
+  } catch (error) {
+    res.status(error.status || 500).json({ message: error.message });
+  }
 };
 
 export const obtenerNiniosController = async (req, res) => {
-  const ninios = await getNiniosService(req, res);
-  res.json(ninios);
+  try {
+    const ninios = await getNiniosService();
+    res.json(ninios);
+  } catch (error) {
+    res.status(error.status || 500).json({ message: error.message });
+  }
 };
 
 export const obtenerNinioPorNombreController = async (req, res) => {
-  const ninio = await getNinioByNameService(req, res);
-  res.json(ninio);
+  try {
+    const ninio = await getNinioByNameService(req.params.nombre);
+    res.json(ninio);
+  } catch (error) {
+    res.status(error.status || 500).json({ message: error.message });
+  }
 };
 
 export const obtenerNinioPorDivisionController = async (req, res) => {
@@ -93,13 +105,21 @@ export const obtenerNinioPorRecorridaController = async (req, res) => {
 };
 
 export const actualizarNinioController = async (req, res) => {
-  const ninioActualizado = await actualizarNinioService(req, res);
-  res.json(ninioActualizado);
+  try {
+    const ninioActualizado = await actualizarNinioService(req.params.id, req.body);
+    res.json(ninioActualizado);
+  } catch (error) {
+    res.status(error.status || 500).json({ message: error.message });
+  }
 };
 
 export const eliminarNinioController = async (req, res) => {
-  const resultadoEliminacion = await eliminarNinioService(req, res);
-  res.json(resultadoEliminacion);
+  try {
+    await eliminarNinioService(req.params.id);
+    res.json({ message: "Niño eliminado correctamente" });
+  } catch (error) {
+    res.status(error.status || 500).json({ message: error.message });
+  }
 };
 
 export const contarNiniosController = async (req, res) => {

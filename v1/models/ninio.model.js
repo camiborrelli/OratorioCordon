@@ -15,6 +15,7 @@ const ninioSchema = new Schema({
   nombre: { type: String },
   apellido: { type: String },
   edad: { type: Number },
+  cantFaltas: { type: Number, default: 0 },
   recorrida: { type: String },
   division: { type: String },
   contactos: { type: [contactoSchema], default: [] },

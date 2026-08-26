@@ -1,20 +1,13 @@
 import Ninio from "../models/ninio.model.js";
 import Division from "../models/division.model.js";
 
-export const getNiniosService = async (req, res) => {
-  try {
-    const ninios = await Ninio.find();
-    res.json(ninios);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+export const getNiniosService = async () => Ninio.find();
 
 export const countNiniosService = async () => {
   return await Ninio.countDocuments();
 };
 
-export const registrarNinioService = async (req, res) => {
+export const registrarNinioService = async (body) => {
   const {
     nombre,
     apellido,
@@ -25,13 +18,15 @@ export const registrarNinioService = async (req, res) => {
     direccion,
     observaciones,
     fechaNacimiento,
-  } = req.body;
+  } = body;
   // Normalize and validate fechaNacimiento
   let fecha_nacimiento = undefined;
   if (fechaNacimiento !== undefined && fechaNacimiento !== "") {
     const parsed = new Date(fechaNacimiento);
     if (isNaN(parsed.getTime())) {
-      return res.status(400).json({ message: "Fecha de nacimiento inválida" });
+      const error = new Error("Fecha de nacimiento inválida");
+      error.status = 400;
+      throw error;
     }
     fecha_nacimiento = parsed;
   }
@@ -84,18 +79,19 @@ export const registrarNinioService = async (req, res) => {
   try {
     const existente = await Ninio.findOne({ nombre });
     if (existente) {
-      return res
-        .status(409)
-        .json({ message: "Ya existe un niño con ese nombre" });
+      const error = new Error("Ya existe un niño con ese nombre");
+      error.status = 409;
+      throw error;
     }
     const ninioGuardado = await nuevoNinio.save();
     agregarNinioARecorrida(ninioGuardado._id, recorrida);
     if (divisionDoc) {
       agregarNinioAdivision(ninioGuardado._id, divisionDoc._id);
     }
-    res.status(201).json(ninioGuardado);
+    return ninioGuardado;
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    if (!error.status) error.status = 400;
+    throw error;
   }
 };
 
@@ -123,23 +119,22 @@ async function agregarNinioAdivision(ninioId, divisionId) {
   }
 }
 
-export const getNinioByNameService = async (req, res) => {
-  const { nombre } = req.params;
+export const getNinioByNameService = async (nombre) => {
   try {
     const ninios = await Ninio.find({ nombre });
     if (ninios.length === 0) {
-      return res
-        .status(404)
-        .json({ message: "No se encontraron niños con ese nombre" });
+      const error = new Error("No se encontraron niños con ese nombre");
+      error.status = 404;
+      throw error;
     }
-    res.json(ninios);
+    return ninios;
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    if (!error.status) error.status = 500;
+    throw error;
   }
 };
 
-export const actualizarNinioService = async (req, res) => {
-  const { id } = req.params;
+export const actualizarNinioService = async (id, body) => {
   const {
     nombre,
     apellido,
@@ -150,13 +145,15 @@ export const actualizarNinioService = async (req, res) => {
     direccion,
     observaciones,
     fechaNacimiento,
-  } = req.body;
+  } = body;
   // Normalize and validate fechaNacimiento for updates
   let fecha_nacimiento = undefined;
   if (fechaNacimiento !== undefined && fechaNacimiento !== "") {
     const parsed = new Date(fechaNacimiento);
     if (isNaN(parsed.getTime())) {
-      return res.status(400).json({ message: "Fecha de nacimiento inválida" });
+      const error = new Error("Fecha de nacimiento inválida");
+      error.status = 400;
+      throw error;
     }
     fecha_nacimiento = parsed;
   }
@@ -216,27 +213,32 @@ export const actualizarNinioService = async (req, res) => {
       { new: true },
     );
     if (!ninioActualizado) {
-      return res.status(404).json({ message: "Niño no encontrado" });
+      const error = new Error("Niño no encontrado");
+      error.status = 404;
+      throw error;
     }
-    res.json(ninioActualizado);
+    return ninioActualizado;
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    if (!error.status) error.status = 400;
+    throw error;
   }
 };
 
 const niniosEliminados = [];
 
-export const eliminarNinioService = async (req, res) => {
-  const { id } = req.params;
+export const eliminarNinioService = async (id) => {
   try {
     const ninioEliminado = await Ninio.findByIdAndDelete(id);
     if (!ninioEliminado) {
-      return res.status(404).json({ message: "Niño no encontrado" });
+      const error = new Error("Niño no encontrado");
+      error.status = 404;
+      throw error;
     }
     niniosEliminados.push(ninioEliminado);
-    res.json({ message: "Niño eliminado correctamente" });
+    return ninioEliminado;
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    if (!error.status) error.status = 500;
+    throw error;
   }
 };
 

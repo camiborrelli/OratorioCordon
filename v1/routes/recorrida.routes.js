@@ -14,9 +14,14 @@ import {
   registrarRecorridaSchema,
   actualizarRecorridaSchema,
 } from "../validators/recorrida.validator.js";
+import auth from "../middlewares/auth.js";
+import { autorizarRoles } from "../middlewares/roles.js";
+
+router.use(auth);
 
 router.post(
   "/",
+  autorizarRoles("admin"),
   validateBody(registrarRecorridaSchema),
   crearRecorridaController,
 );
@@ -26,9 +31,10 @@ router.get("/cantidad", contarRecorridasController);
 router.get("/:id", obtenerRecorridaPorIdController);
 router.put(
   "/:id",
+  autorizarRoles("admin"),
   validateBody(actualizarRecorridaSchema),
   actualizarRecorridaController,
 );
-router.delete("/:id", eliminarRecorridaController);
+router.delete("/:id", autorizarRoles("admin"), eliminarRecorridaController);
 
 export default router;

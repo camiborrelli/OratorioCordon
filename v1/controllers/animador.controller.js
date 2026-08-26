@@ -8,6 +8,7 @@ import {
   eliminarAnimadorService,
   getAnimadorPorEmail,
   quitarRolService,
+  getAnimadoresCumplenMesService,
 } from "../services/animador.services.js";
 
 import Animador from "../models/animador.model.js";
@@ -189,5 +190,15 @@ export const quitarRolController = async (req, res) => {
     res.json(animadorNoCordi);
   } catch (err) {
     res.status(err.status || 500).json({ message: err.message });
+  }
+};
+
+export const animadoresCumplenMesController = async (req, res) => {
+  const { mes } = req.query;
+  try {
+    const ninios = await getAnimadoresCumplenMesService(mes);
+    res.json(ninios);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };

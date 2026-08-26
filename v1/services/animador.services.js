@@ -202,3 +202,26 @@ export const quitarRolService = async (id) => {
 
   return animador;
 };
+
+export const getAnimadoresCumplenMesService = async (mes) => {
+  try {
+    // normalize mes: accept '3', '03', or number; default to current month
+    let monthNum = parseInt(mes, 10);
+    if (isNaN(monthNum) || monthNum < 1 || monthNum > 12) {
+      const now = new Date();
+      monthNum = now.getMonth() + 1;
+    }
+    // Fetch all docs that have a fechaCumple, then filter by month in JS
+    const docs = await Animador.find({
+      fechaCumple: { $exists: true, $ne: null },
+    }).lean();
+    return docs.filter((n) => {
+      if (!n.fechaCumple) return false;
+      const d = new Date(n.fechaCumple);
+      if (isNaN(d.getTime())) return false;
+      return d.getMonth() + 1 === monthNum;
+    });
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
