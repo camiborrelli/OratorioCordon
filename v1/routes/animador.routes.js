@@ -36,7 +36,7 @@ router.get("/cumplen-mes", animadoresCumplenMesController);
 router.get("/id/:id", getAnimadorByIdController);
 
 // Login (no necesita el esquema completo de registro)
-router.post("/login", loginAnimadorController);
+router.post("/login", loginAnimadorController); //la ruta completa es http://localhost:3000/animador/login
 
 // List
 router.get("/", obtenerAnimadoresController);
