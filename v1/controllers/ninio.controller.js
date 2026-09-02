@@ -6,6 +6,7 @@ import {
   eliminarNinioService,
   countNiniosService,
   getNiniosCumplenMesService,
+  getNiniosEliminadosService,
 } from "../services/ninio.services.js";
 import Ninio from "../models/ninio.model.js";
 import Recorrida from "../models/recorrida.model.js";
@@ -106,7 +107,10 @@ export const obtenerNinioPorRecorridaController = async (req, res) => {
 
 export const actualizarNinioController = async (req, res) => {
   try {
-    const ninioActualizado = await actualizarNinioService(req.params.id, req.body);
+    const ninioActualizado = await actualizarNinioService(
+      req.params.id,
+      req.body,
+    );
     res.json(ninioActualizado);
   } catch (error) {
     res.status(error.status || 500).json({ message: error.message });
