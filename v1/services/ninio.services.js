@@ -197,19 +197,24 @@ export const actualizarNinioService = async (id, body) => {
       }
     }
 
+    const datosActualizados = {};
+    if (nombre !== undefined) datosActualizados.nombre = nombre;
+    if (apellido !== undefined) datosActualizados.apellido = apellido;
+    if (edad !== undefined) datosActualizados.edad = edad;
+    if (recorrida !== undefined) datosActualizados.recorrida = recorrida;
+    if (division !== undefined) datosActualizados.division = divisionNombre;
+    if (contactos !== undefined)
+      datosActualizados.contactos = contactosNormalizados;
+    if (direccion !== undefined) datosActualizados.direccion = direccion;
+    if (observaciones !== undefined)
+      datosActualizados.observaciones = observaciones;
+    if (fecha_nacimiento !== undefined) {
+      datosActualizados.fecha_nacimiento = fecha_nacimiento;
+    }
+
     const ninioActualizado = await Ninio.findByIdAndUpdate(
       id,
-      {
-        nombre,
-        apellido,
-        edad,
-        recorrida,
-        division: divisionNombre,
-        contactos: contactosNormalizados,
-        direccion,
-        observaciones,
-        ...(fecha_nacimiento !== undefined ? { fecha_nacimiento } : {}),
-      },
+      datosActualizados,
       { new: true },
     );
     if (!ninioActualizado) {

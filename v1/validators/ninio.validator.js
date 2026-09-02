@@ -51,7 +51,9 @@ export const actualizarNinioSchema = Joi.object({
     "string.empty": "El nombre no puede estar vacío",
     "string.pattern.base": "El nombre debe contener solo letras y espacios",
   }),
-  fechaNacimiento: Joi.date().iso(),
+  fechaNacimiento: Joi.alternatives()
+    .try(Joi.date().iso(), Joi.string().allow(""))
+    .optional(),
 
   apellido: Joi.string().messages({
     "string.empty": "El apellido no puede estar vacío",
@@ -78,4 +80,4 @@ export const actualizarNinioSchema = Joi.object({
       relacion: Joi.string(),
     }),
   ),
-});
+}).min(1);
