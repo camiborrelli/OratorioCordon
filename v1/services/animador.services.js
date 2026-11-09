@@ -70,7 +70,15 @@ export const loginAnimadorService = async (payload = {}) => {
     throw err;
   }
 
-  const animador = await Animador.findOne({ email });
+  const cleanEmail = String(email).trim().toLowerCase();
+
+  // Buscar por email indexado directo o regex si hay registros antiguos en mayúsculas
+  const animador = await Animador.findOne({
+    $or: [
+      { email: cleanEmail },
+      { email: { $regex: new RegExp(`^${cleanEmail}$`, "i") } },
+    ],
+  }).select("_id email password division apodo roles");
 
   if (!animador || !animador.password) {
     const err = new Error("Credenciales inválidas");
@@ -89,7 +97,7 @@ export const loginAnimadorService = async (payload = {}) => {
     { id: animador._id, email: animador.email },
     JWT_SECRET,
     {
-      expiresIn: "1h",
+      expiresIn: "7d",
     },
   );
 
