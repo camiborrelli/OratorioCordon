@@ -41,8 +41,8 @@ router.get("/planificacion", obtenerPlanificacionController);
 router.get("/planificaciones", obtenerPlanificacionController);
 router.post("/recordatorio", autorizarRoles("coordinador", "admin"), registrarRecordatorioController);
 router.post("/recordatorios", autorizarRoles("coordinador", "admin"), registrarRecordatorioController);
-router.post("/planificacion", autorizarRoles("coordinador", "admin"), registrarPlanificacionController);
-router.post("/planificaciones", autorizarRoles("coordinador", "admin"), registrarPlanificacionController);
+router.post("/planificacion", autorizarRoles("coordinador", "admin", "animador"), registrarPlanificacionController);
+router.post("/planificaciones", autorizarRoles("coordinador", "admin", "animador"), registrarPlanificacionController);
 router.get("/contar", contarEventosController);
 
 router.get("/:id", obtenerEventoPorIdController);
@@ -63,7 +63,7 @@ router.put(
 );
 router.delete("/:id", autorizarRoles("coordinador", "admin"), eliminarEventoController);
 
-router.post("/recordatorios/:id/hecho", autorizarRoles("coordinador", "admin"), marcarComoCompletadoController);
+router.post("/recordatorios/:id/hecho", autorizarRoles("coordinador", "admin", "animador"), marcarComoCompletadoController);
 router.delete("/recordatorios/:id", autorizarRoles("coordinador", "admin"), eliminarRecordatorioController);
 router.delete("/planificaciones/:id", autorizarRoles("coordinador", "admin"), eliminarPlanificacionController);
 

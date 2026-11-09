@@ -44,14 +44,19 @@ router.get("/id/:id", obtenerNinioPorIdController);
 router.get("/division/:division", obtenerNinioPorDivisionController);
 router.get("/recorrida/:recorrida", obtenerNinioPorRecorridaController);
 router.get("/eliminados", getNiniosEliminadosController);
-router.post("/", autorizarRoles("coordinador", "admin"), validateBody(registrarNinioSchema), registrarNinioController);
+router.post(
+  "/",
+  autorizarRoles("coordinador", "admin", "animador"),
+  validateBody(registrarNinioSchema),
+  registrarNinioController,
+);
 router.put(
   "/:id",
-  autorizarRoles("coordinador", "admin"),
+  autorizarRoles("coordinador", "admin", "animador"),
   validateBody(actualizarNinioSchema),
   actualizarNinioController,
 ); //la ruta completa es https://localhost:3000/ninios/:id
 router.delete("/:id", autorizarRoles("coordinador", "admin"), eliminarNinioController);
-router.put("/cambiarDivision/:id", autorizarRoles("coordinador", "admin"), cambiarDivisionNinioController);
+router.put("/cambiarDivision/:id", autorizarRoles("coordinador", "admin", "animador"), cambiarDivisionNinioController);
 
 export default router;

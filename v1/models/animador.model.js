@@ -6,7 +6,14 @@ export const AnimadorSchema = new Schema({
   nombre: String,
   apellido: String,
   apodo: String,
-  email: String,
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    index: true,
+    trim: true,
+    lowercase: true,
+  },
   password: String,
   division: {
     type: String,

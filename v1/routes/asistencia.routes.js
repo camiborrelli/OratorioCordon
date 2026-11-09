@@ -20,7 +20,12 @@ router.use(auth);
 router.get("/ninio/:ninioId", obtenerAsistenciaPorNinioController);
 router.get("/fecha/:fecha", obtenerAsistenciaPorFechaController);
 router.get("/ninio/:ninioId/faltas", obtenerCantFaltasPorNinioController);
-router.post("/:ninioId", autorizarRoles("coordinador", "admin"), validateBody(registrarAsistenciaSchema), confirmarAsistenciaController);
+router.post(
+  "/:ninioId",
+  autorizarRoles("coordinador", "admin", "animador"),
+  validateBody(registrarAsistenciaSchema),
+  confirmarAsistenciaController,
+);
 // router.put(
 //   "/:id",
 //   validateBody(actualizarAsistenciaSchema),

@@ -102,6 +102,7 @@ import {
   obtenerPlanificacionController,
 } from "./v1/controllers/planificacion.controller.js";
 
+app.get("/health", (req, res) => res.json({ status: "ok" }));
 app.get("/recordatorios", obtenerRecordatoriosController);
 app.post("/recordatorio", registrarRecordatorioController);
 app.post("/recordatorios", registrarRecordatorioController);

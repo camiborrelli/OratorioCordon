@@ -5,7 +5,7 @@ export const registrarNinioSchema = Joi.object({
     "string.empty": "El nombre es obligatorio",
     "string.pattern.base": "El nombre debe contener solo letras y espacios",
   }),
-  apellido: Joi.string().optional().messages({
+  apellido: Joi.string().allow("").optional().messages({
     "string.empty": "El apellido no puede estar vacío",
   }),
   edad: Joi.number().integer().positive().optional().messages({
@@ -20,7 +20,7 @@ export const registrarNinioSchema = Joi.object({
       "date.format": "La fecha debe respetar formato ISO",
     }),
 
-  direccion: Joi.string().optional().allow(""),
+  direccion: Joi.string().allow("").optional(),
 
   division: Joi.string().required().messages({
     "string.empty": "La división es obligatoria",
@@ -28,8 +28,8 @@ export const registrarNinioSchema = Joi.object({
   recorrida: Joi.string().required().messages({
     "string.empty": "La recorrida es obligatoria",
   }),
-  foto: Joi.string().optional(),
-  observaciones: Joi.string().optional().allow("").messages({
+  foto: Joi.string().allow("").optional(),
+  observaciones: Joi.string().allow("").optional().messages({
     "string.base": "Las observaciones deben ser texto",
   }),
   contactos: Joi.array().items(
@@ -40,10 +40,10 @@ export const registrarNinioSchema = Joi.object({
       telefono: Joi.string().required().messages({
         "string.empty": "El teléfono del contacto es obligatorio",
       }),
-      parentesco: Joi.string().optional(),
-      relacion: Joi.string().optional(),
+      parentesco: Joi.string().allow("").optional(),
+      relacion: Joi.string().allow("").optional(),
     }),
-  ),
+  ).optional(),
 });
 
 export const actualizarNinioSchema = Joi.object({
@@ -55,19 +55,19 @@ export const actualizarNinioSchema = Joi.object({
     .try(Joi.date().iso(), Joi.string().allow(""))
     .optional(),
 
-  apellido: Joi.string().messages({
+  apellido: Joi.string().allow("").optional().messages({
     "string.empty": "El apellido no puede estar vacío",
   }),
-  edad: Joi.number().integer().positive().messages({
+  edad: Joi.number().integer().positive().optional().messages({
     "number.base": "La edad debe ser un número",
     "number.integer": "La edad debe ser un número entero",
     "number.positive": "La edad debe ser un número positivo",
   }),
-  direccion: Joi.string(),
-  foto: Joi.string(),
-  observaciones: Joi.string(),
-  division: Joi.alternatives().try(Joi.string(), Joi.object()),
-  recorrida: Joi.string().valid("rojo", "azul", "naranja", "amarillo"),
+  direccion: Joi.string().allow("").optional(),
+  foto: Joi.string().allow("").optional(),
+  observaciones: Joi.string().allow("").optional(),
+  division: Joi.alternatives().try(Joi.string().allow(""), Joi.object()).optional(),
+  recorrida: Joi.string().allow("").optional(),
   contactos: Joi.array().items(
     Joi.object({
       nombre: Joi.string().messages({
@@ -76,8 +76,8 @@ export const actualizarNinioSchema = Joi.object({
       telefono: Joi.string().messages({
         "string.empty": "El teléfono del contacto no puede estar vacío",
       }),
-      parentesco: Joi.string(),
-      relacion: Joi.string(),
+      parentesco: Joi.string().allow("").optional(),
+      relacion: Joi.string().allow("").optional(),
     }),
-  ),
+  ).optional(),
 }).min(1);
